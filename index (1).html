@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CentAI — Your AI Finance Advisor</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #0a7c55;
+    --green-light: #0faa74;
+    --green-pale: #e6f5ef;
+    --green-mid: #1D9E75;
+    --ink: #0d1f17;
+    --ink-muted: #3d5247;
+    --ink-faint: #7a9488;
+    --cream: #f7f5f0;
+    --white: #ffffff;
+    --border: rgba(10,124,85,0.15);
+    --border-strong: rgba(10,124,85,0.3);
+    --radius: 12px;
+    --radius-lg: 20px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); overflow-x: hidden; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 5vw; height: 64px; display: flex; align-items: center; justify-content: space-between; background: rgba(247,245,240,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--green); letter-spacing: -0.5px; }
+  .nav-logo span { color: var(--ink); }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a { text-decoration: none; font-size: 14px; color: var(--ink-muted); font-weight: 400; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--green); }
+  .nav-cta { background: var(--green); color: #fff !important; padding: 8px 20px; border-radius: 8px; font-weight: 500 !important; transition: background 0.2s !important; }
+  .nav-cta:hover { background: var(--green-light) !important; color: #fff !important; }
+
+  /* HERO */
+  #hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 100px 5vw 60px; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(29,158,117,0.08) 0%, transparent 70%); pointer-events: none; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--green); background: var(--green-pale); border: 1px solid var(--border-strong); padding: 5px 14px; border-radius: 20px; margin-bottom: 28px; letter-spacing: 0.03em; text-transform: uppercase; animation: fadeUp 0.5s ease both; }
+  .hero-badge::before { content: '●'; font-size: 8px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  h1 { font-family: 'DM Serif Display', serif; font-size: clamp(42px, 7vw, 82px); line-height: 1.05; color: var(--ink); max-width: 820px; margin-bottom: 24px; animation: fadeUp 0.5s 0.1s ease both; }
+  h1 em { font-style: italic; color: var(--green); }
+  .hero-sub { font-size: clamp(16px, 2vw, 20px); color: var(--ink-muted); max-width: 520px; line-height: 1.65; margin-bottom: 44px; font-weight: 300; animation: fadeUp 0.5s 0.2s ease both; }
+  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; animation: fadeUp 0.5s 0.3s ease both; }
+  .btn-primary { background: var(--green); color: #fff; padding: 14px 32px; border-radius: 10px; font-size: 16px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s; display: inline-block; }
+  .btn-primary:hover { background: var(--green-light); transform: translateY(-1px); }
+  .btn-ghost { background: transparent; color: var(--ink); padding: 14px 28px; border-radius: 10px; font-size: 16px; font-weight: 400; text-decoration: none; border: 1px solid var(--border-strong); cursor: pointer; transition: border-color 0.2s, transform 0.15s; }
+  .btn-ghost:hover { border-color: var(--green); color: var(--green); transform: translateY(-1px); }
+  .hero-stats { display: flex; gap: 48px; margin-top: 64px; animation: fadeUp 0.5s 0.4s ease both; }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--green); }
+  .stat-label { font-size: 13px; color: var(--ink-faint); margin-top: 2px; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* FEATURES */
+  #features { padding: 100px 5vw; }
+  .section-label { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 12px; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 4vw, 44px); color: var(--ink); margin-bottom: 56px; max-width: 480px; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+  .feature-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px 28px; transition: border-color 0.2s, transform 0.2s; }
+  .feature-card:hover { border-color: var(--green-mid); transform: translateY(-3px); }
+  .feature-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--green-pale); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 20px; }
+  .feature-card h3 { font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 10px; }
+  .feature-card p { font-size: 14px; color: var(--ink-muted); line-height: 1.7; font-weight: 300; }
+
+  /* PRICING */
+  #pricing { padding: 100px 5vw; background: var(--white); }
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; max-width: 900px; margin: 0 auto; }
+  .pricing-card { border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 36px 32px; background: var(--cream); position: relative; }
+  .pricing-card.featured { background: var(--green); border-color: var(--green); color: #fff; transform: scale(1.03); }
+  .plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--green-light); color: #fff; font-size: 11px; font-weight: 500; padding: 4px 14px; border-radius: 20px; white-space: nowrap; }
+  .plan-name { font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-faint); margin-bottom: 12px; }
+  .featured .plan-name { color: rgba(255,255,255,0.65); }
+  .plan-price { font-family: 'DM Serif Display', serif; font-size: 48px; color: var(--ink); line-height: 1; }
+  .featured .plan-price { color: #fff; }
+  .plan-period { font-size: 14px; color: var(--ink-faint); margin-bottom: 28px; font-weight: 300; }
+  .featured .plan-period { color: rgba(255,255,255,0.65); }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+  .plan-features li { font-size: 14px; color: var(--ink-muted); display: flex; align-items: center; gap: 8px; font-weight: 300; }
+  .featured .plan-features li { color: rgba(255,255,255,0.85); }
+  .plan-features li::before { content: '✓'; color: var(--green); font-weight: 500; flex-shrink: 0; }
+  .featured .plan-features li::before { color: rgba(255,255,255,0.9); }
+  .plan-btn { width: 100%; padding: 13px; border-radius: 10px; font-size: 15px; font-weight: 500; cursor: pointer; border: 1.5px solid var(--green); background: transparent; color: var(--green); transition: all 0.2s; font-family: 'DM Sans', sans-serif; text-decoration: none; display: block; text-align: center; }
+  .plan-btn:hover { background: var(--green); color: #fff; }
+  .featured .plan-btn { background: #fff; color: var(--green); border-color: #fff; }
+  .featured .plan-btn:hover { background: var(--green-pale); }
+
+  /* PAYWALL / APP */
+  #app-section { padding: 100px 5vw; }
+  .app-intro { max-width: 560px; margin-bottom: 48px; }
+  .app-wrapper { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; max-width: 780px; box-shadow: 0 8px 40px rgba(10,124,85,0.06); }
+  .app-bar { background: var(--green); padding: 14px 20px; display: flex; align-items: center; gap: 10px; }
+  .app-bar-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+  .app-bar-title { color: #fff; font-size: 14px; font-weight: 500; flex: 1; text-align: center; font-family: 'DM Serif Display', serif; letter-spacing: 0.3px; }
+
+  /* PAYWALL SCREEN */
+  #paywall-screen { padding: 48px 40px; text-align: center; }
+  #paywall-screen h2 { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--ink); margin-bottom: 10px; }
+  #paywall-screen p { font-size: 14px; color: var(--ink-muted); margin-bottom: 32px; font-weight: 300; }
+  .auth-tabs { display: flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; max-width: 280px; margin: 0 auto 28px; }
+  .auth-tab { flex: 1; padding: 9px; font-size: 14px; cursor: pointer; background: transparent; border: none; color: var(--ink-muted); font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .auth-tab.active { background: var(--green); color: #fff; font-weight: 500; }
+  .auth-form { max-width: 340px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+  .auth-form input { width: 100%; padding: 11px 14px; border: 1px solid var(--border-strong); border-radius: 9px; font-size: 14px; font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); outline: none; transition: border-color 0.2s; }
+  .auth-form input:focus { border-color: var(--green); }
+  .auth-form input::placeholder { color: var(--ink-faint); }
+  .auth-submit { background: var(--green); color: #fff; border: none; padding: 13px; border-radius: 9px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.2s; }
+  .auth-submit:hover { background: var(--green-light); }
+  .auth-divider { font-size: 12px; color: var(--ink-faint); margin: 4px 0; }
+  .plan-pills { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
+  .plan-pill { padding: 7px 18px; border-radius: 20px; border: 1px solid var(--border-strong); font-size: 13px; cursor: pointer; background: transparent; color: var(--ink-muted); font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .plan-pill.active { background: var(--green); color: #fff; border-color: var(--green); }
+  .plan-pill-label { font-size: 11px; color: var(--ink-faint); margin-bottom: 10px; }
+  #error-msg { font-size: 13px; color: #c0392b; background: #fdecea; border-radius: 8px; padding: 8px 12px; display: none; }
+
+  /* CHAT SCREEN */
+  #chat-screen { display: none; flex-direction: column; height: 540px; }
+  #chat-topbar { padding: 12px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; background: var(--cream); }
+  #chat-topbar .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-light); animation: pulse 2s infinite; }
+  #chat-topbar .user-info { flex: 1; font-size: 13px; color: var(--ink-muted); }
+  #chat-topbar .user-info span { color: var(--green); font-weight: 500; }
+  #logout-btn { font-size: 12px; color: var(--ink-faint); background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; font-family: 'DM Sans', sans-serif; }
+  #logout-btn:hover { color: var(--ink); background: var(--green-pale); }
+  #chip-bar { display: flex; gap: 6px; padding: 8px 14px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; background: var(--white); }
+  #chip-bar::-webkit-scrollbar { display: none; }
+  .qchip { white-space: nowrap; font-size: 12px; padding: 5px 11px; border: 1px solid var(--border-strong); border-radius: 20px; cursor: pointer; color: var(--ink-muted); background: var(--white); font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .qchip:hover { background: var(--green-pale); color: var(--green); border-color: var(--green); }
+  #messages { flex: 1; overflow-y: auto; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; background: var(--white); }
+  .msg { display: flex; gap: 8px; animation: fadeUp 0.2s ease; }
+  .msg.user { flex-direction: row-reverse; }
+  .bubble { max-width: 80%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.65; background: var(--cream); border: 1px solid var(--border); color: var(--ink); }
+  .msg.user .bubble { background: var(--green); color: #fff; border-color: var(--green); }
+  .av { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; font-size: 13px; font-weight: 500; }
+  .av.ai { background: var(--green); color: #fff; }
+  .av.user { background: var(--green-pale); color: var(--green); }
+  .typing { display: flex; gap: 4px; align-items: center; }
+  .typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-faint); animation: blink 1.2s infinite; }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink { 0%,80%,100%{opacity:0.3} 40%{opacity:1} }
+  #input-row { display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid var(--border); background: var(--cream); }
+  #msg-input { flex: 1; resize: none; border: 1px solid var(--border-strong); border-radius: 10px; padding: 9px 12px; font-size: 14px; font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--ink); line-height: 1.5; min-height: 40px; max-height: 100px; outline: none; }
+  #msg-input:focus { border-color: var(--green); }
+  #send-btn { width: 38px; height: 38px; border-radius: 10px; background: var(--green); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: opacity 0.15s; font-size: 18px; color: #fff; }
+  #send-btn:hover { opacity: 0.85; }
+  #send-btn:disabled { opacity: 0.35; cursor: default; }
+
+  /* FOOTER */
+  footer { background: var(--ink); color: rgba(255,255,255,0.5); text-align: center; padding: 32px 5vw; font-size: 13px; font-weight: 300; }
+  footer span { color: var(--green-light); }
+
+  @media (max-width: 600px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .hero-stats { gap: 28px; }
+    #paywall-screen { padding: 32px 20px; }
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Cent<span>AI</span></div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#app-section" class="nav-cta">Try Free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-badge">AI-Powered Finance</div>
+  <h1>Your money,<br><em>finally</em> understood.</h1>
+  <p class="hero-sub">CentAI is an AI finance advisor that analyzes your spending, guides your investments, and helps your business grow — available 24/7 at a fraction of an advisor's cost.</p>
+  <div class="hero-btns">
+    <a href="#app-section" class="btn-primary">Start for free →</a>
+    <a href="#features" class="btn-ghost">See what it does</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Always available</div></div>
+    <div class="stat"><div class="stat-num">$0</div><div class="stat-label">to get started</div></div>
+    <div class="stat"><div class="stat-num">3-in-1</div><div class="stat-label">Personal · Investing · Business</div></div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-label">What CentAI does</div>
+  <div class="section-title">One advisor for every financial question you have.</div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">💰</div>
+      <h3>Budget & Spending</h3>
+      <p>Paste your bank data and get an instant breakdown of where your money goes, plus a smart budget plan tailored to your goals.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📈</div>
+      <h3>Investment Guidance</h3>
+      <p>Compare ETFs, understand stocks, plan a portfolio — with plain-English explanations that cut through financial jargon.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏢</div>
+      <h3>Business Financials</h3>
+      <p>Analyze cash flow, calculate break-even points, track KPIs. Get CFO-level insight without a CFO's salary.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧮</div>
+      <h3>Financial Calculators</h3>
+      <p>Mortgage repayments, compound interest, retirement savings, loan amortization — just ask and get the math instantly.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>Data Analysis</h3>
+      <p>Upload a spreadsheet or paste a table of transactions. CentAI spots trends, flags anomalies, and gives you actionable takeaways.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3>Goal Planning</h3>
+      <p>Whether it's a house deposit, early retirement, or paying off debt — get a clear, step-by-step plan to reach your targets.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div style="text-align:center; margin-bottom: 56px;">
+    <div class="section-label" style="text-align:center;">Pricing</div>
+    <div class="section-title" style="max-width:100%; text-align:center; margin-bottom:0;">Simple plans. No surprises.</div>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price">$0</div>
+      <div class="plan-period">free forever</div>
+      <ul class="plan-features">
+        <li>20 questions per month</li>
+        <li>Budget & spending analysis</li>
+        <li>Basic financial Q&A</li>
+        <li>Paste data for instant analysis</li>
+      </ul>
+      <button class="plan-btn" onclick="document.getElementById('app-section').scrollIntoView({behavior:'smooth'})">Get started free</button>
+    </div>
+    <div class="pricing-card featured">
+      <div class="plan-badge">Most popular</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">$19</div>
+      <div class="plan-period">per month</div>
+      <ul class="plan-features">
+        <li>Unlimited questions</li>
+        <li>All financial topics</li>
+        <li>Priority responses</li>
+        <li>CSV & spreadsheet upload</li>
+        <li>Save & revisit conversations</li>
+      </ul>
+      <a class="plan-btn" href="https://buy.stripe.com/14A6oI6yxegrbHEg427EQ00" target="_blank">Start Pro — $19/mo</a>
+    </div>
+    <div class="pricing-card">
+      <div class="plan-name">Business</div>
+      <div class="plan-price">$49</div>
+      <div class="plan-period">per month</div>
+      <ul class="plan-features">
+        <li>Everything in Pro</li>
+        <li>5 team seats included</li>
+        <li>Business KPIs & P&L analysis</li>
+        <li>White-label option</li>
+        <li>Priority email support</li>
+      </ul>
+      <a class="plan-btn" href="https://buy.stripe.com/cNifZi4qpgoz8vsg427EQ01" target="_blank">Start Business</a>
+    </div>
+  </div>
+</section>
+
+<!-- APP SECTION -->
+<section id="app-section">
+  <div class="app-intro">
+    <div class="section-label">Try it now</div>
+    <div class="section-title" style="margin-bottom: 12px;">Sign up and ask your first question.</div>
+    <p style="font-size:15px; color:var(--ink-muted); font-weight:300; line-height:1.7;">Create a free account to start chatting with CentAI. No credit card required for the Starter plan.</p>
+  </div>
+  <div class="app-wrapper">
+    <div class="app-bar">
+      <div class="app-bar-dot"></div>
+      <div class="app-bar-dot"></div>
+      <div class="app-bar-dot"></div>
+      <div class="app-bar-title">CentAI</div>
+    </div>
+
+    <!-- PAYWALL -->
+    <div id="paywall-screen">
+      <h2>Create your free account</h2>
+      <p>Choose your plan, then sign up to start chatting.</p>
+      <div class="plan-pill-label">Select plan:</div>
+      <div class="plan-pills">
+        <button class="plan-pill active" onclick="setPlan(this,'free')">Free</button>
+        <button class="plan-pill" onclick="setPlan(this,'pro')">Pro — $19/mo</button>
+        <button class="plan-pill" onclick="setPlan(this,'business')">Business — $49/mo</button>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab(this,'signup')">Sign up</button>
+        <button class="auth-tab" onclick="switchTab(this,'login')">Log in</button>
+      </div>
+      <div class="auth-form">
+        <div id="error-msg"></div>
+        <input type="text" id="name-field" placeholder="Your name" />
+        <input type="email" id="email-field" placeholder="Email address" />
+        <input type="password" id="pass-field" placeholder="Password (min 6 chars)" />
+        <button class="auth-submit" id="auth-submit-btn">Create free account →</button>
+        <p style="font-size:12px; color:var(--ink-faint); text-align:center; margin-top:4px;">By signing up you agree to our Terms of Service.</p>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div id="chat-screen">
+      <div id="chat-topbar">
+        <div class="dot"></div>
+        <div class="user-info">Signed in as <span id="user-display"></span></div>
+        <button id="logout-btn" onclick="clearMemory()" title="Clear memory" style="margin-right:4px;">🗑️</button>
+        <button id="logout-btn" onclick="logout()">Log out</button>
+      </div>
+      <div id="chip-bar">
+        <div class="qchip" onclick="quickAsk('Help me create a monthly budget plan')">📊 Budget plan</div>
+        <div class="qchip" onclick="quickAsk('Explain ETFs vs mutual funds')">📈 ETF vs funds</div>
+        <div class="qchip" onclick="quickAsk('What KPIs should I track for my small business?')">🏢 Business KPIs</div>
+        <div class="qchip" onclick="quickAsk('How much should I save for retirement?')">🏦 Retirement</div>
+        <div class="qchip" onclick="quickAsk('Calculate compound interest on $5000 at 7% over 20 years')">🧮 Compound interest</div>
+      </div>
+      <div id="messages"></div>
+      <div id="input-row">
+        <label id="file-btn" title="Upload CSV or file" style="width:36px;height:38px;border-radius:10px;background:var(--green-pale);border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:16px;">📎<input type="file" id="file-input" accept=".csv,.txt,.xlsx,.xls,.pdf" style="display:none" onchange="handleFile(this)"></label>
+        <textarea id="msg-input" placeholder="Ask anything… or upload a file 📎" rows="1"></textarea>
+        <button id="send-btn" onclick="sendMessage()">↑</button>
+      </div>
+      <div id="feedback-bar" style="display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-top:1px solid var(--border);background:var(--cream);">
+        <span style="font-size:11px;color:var(--ink-faint);">How are we doing?</span>
+        <button onclick="openFeedback()" style="font-size:12px;color:var(--green);background:none;border:1px solid var(--border-strong);border-radius:8px;padding:4px 12px;cursor:pointer;font-family:DM Sans,sans-serif;">Send feedback</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEEDBACK MODAL -->
+<div id="feedback-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:var(--white);border-radius:var(--radius-lg);padding:32px;max-width:440px;width:90%;position:relative;">
+    <h3 style="font-family:DM Serif Display,serif;font-size:22px;color:var(--ink);margin-bottom:8px;">Send feedback</h3>
+    <p style="font-size:14px;color:var(--ink-muted);margin-bottom:20px;font-weight:300;">Your feedback goes directly to Mario. He reads every message.</p>
+    <div style="display:flex;gap:8px;margin-bottom:16px;" id="rating-row">
+      <button class="fb-rate" onclick="setRating(this,'Love it')" style="flex:1;padding:10px;border:1px solid var(--border-strong);border-radius:10px;background:transparent;font-size:20px;cursor:pointer;">😍</button>
+      <button class="fb-rate" onclick="setRating(this,'Good')" style="flex:1;padding:10px;border:1px solid var(--border-strong);border-radius:10px;background:transparent;font-size:20px;cursor:pointer;">😊</button>
+      <button class="fb-rate" onclick="setRating(this,'Ok')" style="flex:1;padding:10px;border:1px solid var(--border-strong);border-radius:10px;background:transparent;font-size:20px;cursor:pointer;">😐</button>
+      <button class="fb-rate" onclick="setRating(this,'Needs work')" style="flex:1;padding:10px;border:1px solid var(--border-strong);border-radius:10px;background:transparent;font-size:20px;cursor:pointer;">😞</button>
+    </div>
+    <textarea id="fb-text" placeholder="Tell us what you think, what is missing, or what you love…" style="width:100%;height:100px;padding:10px 12px;border:1px solid var(--border-strong);border-radius:10px;font-size:14px;font-family:DM Sans,sans-serif;background:var(--cream);color:var(--ink);resize:none;outline:none;margin-bottom:12px;"></textarea>
+    <div style="display:flex;gap:10px;">
+      <button onclick="closeFeedback()" style="flex:1;padding:11px;border:1px solid var(--border-strong);border-radius:10px;background:transparent;font-size:14px;cursor:pointer;font-family:DM Sans,sans-serif;color:var(--ink-muted);">Cancel</button>
+      <button onclick="submitFeedback()" id="fb-submit-btn" style="flex:2;padding:11px;border:none;border-radius:10px;background:var(--green);color:#fff;font-size:14px;font-weight:500;cursor:pointer;font-family:DM Sans,sans-serif;">Send to Mario</button>
+    </div>
+    <div id="fb-success" style="display:none;text-align:center;padding:16px 0 0;font-size:14px;color:var(--green);font-weight:500;">Thank you! Mario will read your feedback shortly.</div>
+  </div>
+</div>
+
+<footer>
+  © 2026 <span>CentAI</span> — AI-powered finance for everyone. Not a licensed financial advisor.
+</footer>
+
+
+<script>
+window.addEventListener('load', function() {
+  // ── Supabase config ──────────────────────────────────────────────
+  const SUPABASE_URL = 'https://utcruwpakpwkwcpnyvwt.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_O9Xn_Qsc22wJ0XJfkw7hPg_7W5Ct7Pd';
+  const SITE_URL = 'https://superb-semolina-7a939e.netlify.app';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { redirectTo: SITE_URL } });
+
+  // ── Stripe payment links ─────────────────────────────────────────
+  // Replace these with your real Stripe payment links once created
+  const STRIPE_PRO_LINK     = 'https://buy.stripe.com/14A6oI6yxegrbHEg427EQ00';
+  const STRIPE_BUSINESS_LINK = 'https://buy.stripe.com/cNifZi4qpgoz8vsg427EQ01';
+
+  let currentTab = 'signup';
+  let selectedPlan = 'free';
+  let chatHistory = [];
+  let currentUser = null;
+
+  // ── Plan pill selection ──────────────────────────────────────────
+  function setPlan(el, plan) {
+    selectedPlan = plan;
+    document.querySelectorAll('.plan-pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    const btn = document.querySelector('.auth-submit');
+    if (plan === 'free') {
+      btn.textContent = 'Create free account →';
+    } else if (plan === 'pro') {
+      btn.textContent = 'Sign up & go Pro ($19/mo) →';
+    } else {
+      btn.textContent = 'Sign up & go Business ($49/mo) →';
+    }
+  }
+
+  function switchTab(el, tab) {
+    currentTab = tab;
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    const nameField = document.getElementById('name-field');
+    const btn = document.querySelector('.auth-submit');
+    if (tab === 'login') {
+      nameField.style.display = 'none';
+      btn.textContent = 'Log in →';
+    } else {
+      nameField.style.display = '';
+      btn.textContent = selectedPlan === 'free' ? 'Create free account →' : 'Sign up & continue →';
+    }
+    showError('');
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.style.display = msg ? 'block' : 'none';
+  }
+
+  function showLoading(loading) {
+    const btn = document.querySelector('.auth-submit');
+    btn.disabled = loading;
+    btn.style.opacity = loading ? '0.6' : '1';
+    if (loading) btn.textContent = 'Please wait…';
+  }
+
+  // ── Auth handler ─────────────────────────────────────────────────
+  async function handleAuth() {
+    const email = document.getElementById('email-field').value.trim();
+    const pass  = document.getElementById('pass-field').value;
+    const name  = document.getElementById('name-field').value.trim();
+    if (!email || !pass) { showError('Please fill in all fields.'); return; }
+    showLoading(true);
+    showError('');
+
+    if (currentTab === 'signup') {
+      if (!name) { showError('Please enter your name.'); showLoading(false); return; }
+      if (pass.length < 6) { showError('Password must be at least 6 characters.'); showLoading(false); return; }
+
+      const { data, error } = await supabase.auth.signUp({
+        email, password: pass,
+        options: { data: { full_name: name, plan: selectedPlan } }
+      });
+      if (error) { showError(error.message); showLoading(false); return; }
+
+      // After signup, redirect paid plans to Stripe
+      if (selectedPlan === 'pro') {
+        window.open(STRIPE_PRO_LINK, '_blank');
+      } else if (selectedPlan === 'business') {
+        window.open(STRIPE_BUSINESS_LINK, '_blank');
+      }
+
+      currentUser = { email, name, plan: selectedPlan };
+      enterApp(currentUser);
+
+    } else {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+      if (error) { showError('Incorrect email or password.'); showLoading(false); return; }
+
+      const meta = data.user?.user_metadata || {};
+      currentUser = { email, name: meta.full_name || email.split('@')[0], plan: meta.plan || 'free' };
+      enterApp(currentUser);
+    }
+    showLoading(false);
+  }
+
+  // ── App entry + memory load ──────────────────────────────────────
+  async function enterApp(user) {
+    document.getElementById('paywall-screen').style.display = 'none';
+    const chat = document.getElementById('chat-screen');
+    chat.style.display = 'flex';
+    document.getElementById('user-display').textContent = `${user.name} · ${user.plan}`;
+    chatHistory = [];
+
+    // Load previous conversation from Supabase
+    try {
+      const { data } = await supabase
+        .from('conversations')
+        .select('messages')
+        .eq('user_email', user.email)
+        .single();
+      if (data?.messages?.length) {
+        chatHistory = data.messages;
+        // Replay messages in UI
+        chatHistory.forEach(m => {
+          if (m.role === 'user') addMsg('user', typeof m.content === 'string' ? m.content : '[file upload]');
+          if (m.role === 'assistant') {
+            const text = Array.isArray(m.content) ? m.content.filter(b=>b.type==='text').map(b=>b.text).join('') : m.content;
+            addMsg('ai', text);
+          }
+        });
+        addMsg('ai', `Welcome back, ${user.name}! 👋 I remember our previous conversation. How can I help you today?`);
+        return;
+      }
+    } catch(e) {}
+
+    addMsg('ai', `Welcome, ${user.name}! 👋 I'm CentAI, your personal finance advisor. You're on the <strong>${user.plan}</strong> plan.\n\nAsk me anything — budgets, investments, business finances — or upload a file and I'll analyze it.`);
+  }
+
+  // ── Save conversation to Supabase ────────────────────────────────
+  async function saveConversation() {
+    if (!currentUser) return;
+    try {
+      const { data } = await supabase.from('conversations').select('id').eq('user_email', currentUser.email).single();
+      if (data?.id) {
+        await supabase.from('conversations').update({ messages: chatHistory, updated_at: new Date().toISOString() }).eq('user_email', currentUser.email);
+      } else {
+        await supabase.from('conversations').insert([{ user_email: currentUser.email, messages: chatHistory }]);
+      }
+    } catch(e) {}
+  }
+
+  async function logout() {
+    await supabase.auth.signOut();
+    currentUser = null;
+    document.getElementById('chat-screen').style.display = 'none';
+    document.getElementById('paywall-screen').style.display = 'block';
+    document.getElementById('messages').innerHTML = '';
+    chatHistory = [];
+  }
+
+  // ── Clear memory ─────────────────────────────────────────────────
+  async function clearMemory() {
+    if (!currentUser) return;
+    if (!confirm('Clear your conversation history? This cannot be undone.')) return;
+    await supabase.from('conversations').delete().eq('user_email', currentUser.email);
+    chatHistory = [];
+    document.getElementById('messages').innerHTML = '';
+    addMsg('ai', "Memory cleared! Let's start fresh. How can I help you today?");
+  }
+
+  // ── Chat helpers ─────────────────────────────────────────────────
+  function addMsg(role, text) {
+    const isUser = role === 'user';
+    const div = document.createElement('div');
+    div.className = 'msg' + (isUser ? ' user' : '');
+    div.innerHTML = `<div class="av ${isUser?'user':'ai'}">${isUser?'👤':'¢'}</div><div class="bubble">${text.replace(/\n/g,'<br>')}</div>`;
+    document.getElementById('messages').appendChild(div);
+    document.getElementById('messages').scrollTop = 99999;
+  }
+
+  function showTyping() {
+    const div = document.createElement('div'); div.className = 'msg'; div.id = 'typing';
+    div.innerHTML = `<div class="av ai">¢</div><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+    document.getElementById('messages').appendChild(div);
+    document.getElementById('messages').scrollTop = 99999;
+  }
+
+  const SYSTEM = `You are CentAI, a friendly and expert personal finance advisor. You help with personal budgeting, investing, business financials, and data analysis. You have access to web search for real-time market data, stock prices, and financial news. Be concise, practical, and specific. Use numbers and examples. Format responses clearly. Avoid jargon unless asked. If the user pastes or uploads financial data, analyze it thoroughly and give actionable insights.`;
+
+  // ── File upload handler ───────────────────────────────────────────
+  function handleFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const content = e.target.result;
+      const msg = `I have uploaded a file called "${file.name}". Here is its contents:\n\n${content.substring(0, 8000)}${content.length > 8000 ? '\n\n[File truncated — showing first 8000 characters]' : ''}\n\nPlease analyse this data and give me key insights, patterns, and recommendations.`;
+      sendMessage(msg, `📎 Uploaded: ${file.name}`);
+    };
+    reader.readAsText(file);
+    input.value = '';
+  }
+
+  // ── Feedback modal ────────────────────────────────────────────────
+  let selectedRating = '';
+  function openFeedback() {
+    document.getElementById('feedback-modal').style.display = 'flex';
+    document.getElementById('fb-success').style.display = 'none';
+    document.getElementById('fb-text').value = '';
+    selectedRating = '';
+    document.querySelectorAll('.fb-rate').forEach(b => b.style.background = 'transparent');
+  }
+  function closeFeedback() { document.getElementById('feedback-modal').style.display = 'none'; }
+  function setRating(el, rating) {
+    selectedRating = rating;
+    document.querySelectorAll('.fb-rate').forEach(b => b.style.background = 'transparent');
+    el.style.background = 'var(--green-pale)';
+  }
+  async function submitFeedback() {
+    const text = document.getElementById('fb-text').value.trim();
+    if (!text && !selectedRating) { alert('Please add a rating or message.'); return; }
+    const btn = document.getElementById('fb-submit-btn');
+    btn.textContent = 'Sending...'; btn.disabled = true;
+    const user = currentUser?.email || 'anonymous';
+    const plan = currentUser?.plan || 'unknown';
+    const feedback = { rating: selectedRating, message: text, user, plan, date: new Date().toISOString() };
+    try {
+      await supabase.from('feedback').insert([feedback]);
+    } catch(e) {}
+    document.getElementById('fb-success').style.display = 'block';
+    btn.textContent = 'Send to Mario'; btn.disabled = false;
+    setTimeout(closeFeedback, 2500);
+  }
+
+  // ── Send message with web search ──────────────────────────────────
+  async function sendMessage(text, displayText) {
+    const input = document.getElementById('msg-input');
+    const userText = text || input.value.trim();
+    if (!userText) return;
+    input.value = ''; input.style.height = 'auto';
+    document.getElementById('send-btn').disabled = true;
+    addMsg('user', displayText || userText);
+    chatHistory.push({ role: 'user', content: userText });
+    showTyping();
+    try {
+      const res = await fetch('/.netlify/functions/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1500,
+          system: SYSTEM,
+          tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+          messages: chatHistory.map(m => ({
+            role: m.role,
+            content: Array.isArray(m.content)
+              ? m.content.filter(b => b.type === 'text').map(b => b.text).join('') || 'ok'
+              : (typeof m.content === 'string' ? m.content : 'ok')
+          }))
+        })
+      });
+      const data = await res.json();
+      console.log('API response:', JSON.stringify(data).substring(0, 500));
+      if (data.error) {
+        document.getElementById('typing')?.remove();
+        addMsg('ai', 'Error: ' + (data.error.message || JSON.stringify(data.error)));
+        document.getElementById('send-btn').disabled = false;
+        return;
+      }
+      const reply = data.content?.filter(b => b.type === 'text').map(b => b.text).join('') || 'Sorry, something went wrong.';
+      document.getElementById('typing')?.remove();
+      chatHistory.push({ role: 'assistant', content: data.content || reply });
+      addMsg('ai', reply);
+      saveConversation();
+    } catch {
+      document.getElementById('typing')?.remove();
+      addMsg('ai', 'Connection error. Please try again.');
+    }
+    document.getElementById('send-btn').disabled = false;
+    input.focus();
+  }
+
+  function quickAsk(q) { sendMessage(q); }
+
+  const inp = document.getElementById('msg-input');
+  inp.addEventListener('input', () => { inp.style.height = 'auto'; inp.style.height = Math.min(inp.scrollHeight, 100) + 'px'; });
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+
+  // ── Auto-restore session ─────────────────────────────────────────
+  supabase.auth.getSession().then(({ data }) => {
+    if (data?.session?.user) {
+      const u = data.session.user;
+      const meta = u.user_metadata || {};
+      currentUser = { email: u.email, name: meta.full_name || u.email.split('@')[0], plan: meta.plan || 'free' };
+      enterApp(currentUser);
+    }
+  });
+
+  // ── Expose functions globally for onclick handlers ────────────────
+  window.handleAuth = handleAuth;
+  // Direct event listener as backup
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('auth-submit-btn');
+    if (btn) btn.addEventListener('click', handleAuth);
+  });
+  // Also try immediately
+  var authBtn = document.getElementById('auth-submit-btn');
+  if (authBtn) authBtn.addEventListener('click', handleAuth);
+  window.setPlan = setPlan;
+  window.switchTab = switchTab;
+  window.logout = logout;
+  window.clearMemory = clearMemory;
+  window.sendMessage = sendMessage;
+  window.quickAsk = quickAsk;
+  window.handleFile = handleFile;
+  window.openFeedback = openFeedback;
+  window.closeFeedback = closeFeedback;
+  window.setRating = setRating;
+  window.submitFeedback = submitFeedback;
+  window.selectPlan = selectPlan;
+
+}); // end window.onload
+</script>
