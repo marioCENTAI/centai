@@ -15,22 +15,33 @@ exports.handler = async function(event, context) {
   }
 
   try {
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) {
+      return { statusCode: 500, headers, body: JSON.stringify({ error: 'API key not configured' }) };
+    }
+
     const body = JSON.parse(event.body);
+
+    const cleanMessages = body.messages.map(m => ({
+      role: m.role,
+      content: typeof m.content === 'string' ? m.content :
+               Array.isArray(m.content) ? m.content.filter(b => b.type === 'text').map(b => b.text).join(' ') :
+               String(m.content)
+    })).filter(m => m.content && m.content.trim());
 
     const requestBody = {
       model: 'claude-sonnet-4-20250514',
       max_tokens: 1500,
-      system: body.system || 'You are CentAI, a helpful finance advisor.',
-      messages: body.messages
+      system: body.system || 'You are CentAI, a helpful AI finance advisor.',
+      messages: cleanMessages
     };
 
     const anthropicHeaders = {
       'Content-Type': 'application/json',
-      'x-api-key': process.env.ANTHROPIC_API_KEY,
+      'x-api-key': apiKey,
       'anthropic-version': '2023-06-01'
     };
 
-    // Add web search if requested
     if (body.tools && body.tools.length > 0) {
       requestBody.tools = body.tools;
       anthropicHeaders['anthropic-beta'] = 'web-search-2025-03-05';
@@ -43,18 +54,9 @@ exports.handler = async function(event, context) {
     });
 
     const responseText = await response.text();
-
-    return {
-      statusCode: response.status,
-      headers,
-      body: responseText
-    };
+    return { statusCode: response.status, headers, body: responseText };
 
   } catch (error) {
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ error: error.message })
-    };
+    return { statusCode: 500, headers, body: JSON.stringify({ error: error.message }) };
   }
 };
