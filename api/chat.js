@@ -14,7 +14,7 @@ module.exports = async function(req, res) {
                Array.isArray(m.content) ? m.content.filter(b => b.type === 'text').map(b => b.text).join(' ') || 'ok' : 'ok'
     })).filter(m => m.content.trim());
     const reqBody = {
-      model: 'claude-sonnet-4-5',
+      model: 'claude-sonnet-4-6',
       max_tokens: 1500,
       system: system || 'You are CentAI, a helpful AI finance advisor.',
       messages: cleanMessages
