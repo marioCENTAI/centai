@@ -157,6 +157,13 @@
     .hero-stats { gap: 28px; }
     #paywall-screen { padding: 32px 20px; }
   }
+  #install-banner { display: none; position: fixed; bottom: 80px; left: 16px; right: 16px; background: var(--ink); color: #fff; border-radius: 14px; padding: 14px 16px; z-index: 200; align-items: center; gap: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  #install-banner .ib-icon { font-size: 28px; flex-shrink: 0; }
+  #install-banner .ib-text { flex: 1; }
+  #install-banner .ib-title { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+  #install-banner .ib-sub { font-size: 12px; color: rgba(255,255,255,0.6); }
+  #install-banner .ib-close { background: none; border: none; color: rgba(255,255,255,0.5); font-size: 20px; cursor: pointer; padding: 4px; flex-shrink: 0; }
+  #install-banner .ib-btn { background: var(--green); color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; flex-shrink: 0; font-family: DM Sans, sans-serif; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
 </head>
@@ -360,6 +367,41 @@
       <button onclick="submitFeedback()" id="fb-submit-btn" style="flex:2;padding:11px;border:none;border-radius:10px;background:var(--green);color:#fff;font-size:14px;font-weight:500;cursor:pointer;font-family:DM Sans,sans-serif;">Send to Mario</button>
     </div>
     <div id="fb-success" style="display:none;text-align:center;padding:16px 0 0;font-size:14px;color:var(--green);font-weight:500;">Thank you! Mario will read your feedback shortly.</div>
+  </div>
+</div>
+
+<!-- INSTALL BANNER -->
+<div id="install-banner">
+  <div class="ib-icon">📱</div>
+  <div class="ib-text">
+    <div class="ib-title">Add CentAI to your home screen</div>
+    <div class="ib-sub">Tap Share → "Add to Home Screen" for app experience</div>
+  </div>
+  <button class="ib-btn" onclick="showInstallHelp()">How?</button>
+  <button class="ib-close" onclick="dismissBanner()">✕</button>
+</div>
+
+<!-- INSTALL HELP MODAL -->
+<div id="install-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:var(--white);border-radius:var(--radius-lg);padding:28px;max-width:340px;width:90%;margin:0 16px;">
+    <h3 style="font-family:DM Serif Display,serif;font-size:20px;color:var(--ink);margin-bottom:16px;">Install CentAI</h3>
+    <div id="ios-instructions" style="display:none;">
+      <p style="font-size:14px;color:var(--ink-muted);margin-bottom:12px;line-height:1.6;">On iPhone/iPad:</p>
+      <ol style="font-size:14px;color:var(--ink-muted);padding-left:20px;line-height:2;">
+        <li>Tap the <strong>Share</strong> button (□↑) at the bottom</li>
+        <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
+        <li>Tap <strong>"Add"</strong> in the top right</li>
+      </ol>
+    </div>
+    <div id="android-instructions" style="display:none;">
+      <p style="font-size:14px;color:var(--ink-muted);margin-bottom:12px;line-height:1.6;">On Android:</p>
+      <ol style="font-size:14px;color:var(--ink-muted);padding-left:20px;line-height:2;">
+        <li>Tap the <strong>menu (⋮)</strong> in top right</li>
+        <li>Tap <strong>"Add to Home Screen"</strong></li>
+        <li>Tap <strong>"Add"</strong> to confirm</li>
+      </ol>
+    </div>
+    <button onclick="document.getElementById('install-modal').style.display='none'" style="margin-top:20px;width:100%;padding:12px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:500;cursor:pointer;font-family:DM Sans,sans-serif;">Got it!</button>
   </div>
 </div>
 
@@ -616,7 +658,7 @@ window.addEventListener('load', function() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-5',
+          model: 'claude-sonnet-4-6',
           max_tokens: 1500,
           system: SYSTEM,
           tools: [{ type: 'web_search_20250305', name: 'web_search' }],
@@ -696,6 +738,31 @@ window.addEventListener('load', function() {
     }, 400);
   }
   window.selectPlan = selectPlan;
+
+  // ── Install banner ───────────────────────────────────────────────
+  function showInstallBanner() {
+    const banner = document.getElementById('install-banner');
+    if (banner && !localStorage.getItem('installDismissed')) {
+      banner.style.display = 'flex';
+    }
+  }
+  function dismissBanner() {
+    document.getElementById('install-banner').style.display = 'none';
+    localStorage.setItem('installDismissed', '1');
+  }
+  function showInstallHelp() {
+    document.getElementById('install-modal').style.display = 'flex';
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    document.getElementById('ios-instructions').style.display = isIOS ? 'block' : 'none';
+    document.getElementById('android-instructions').style.display = isIOS ? 'none' : 'block';
+  }
+  window.dismissBanner = dismissBanner;
+  window.showInstallHelp = showInstallHelp;
+
+  // Show banner on mobile after 3 seconds
+  if (/Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 768) {
+    setTimeout(showInstallBanner, 3000);
+  }
 
 }); // end window.onload
 </script>
