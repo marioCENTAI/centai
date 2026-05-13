@@ -365,6 +365,8 @@
 
 <footer>
   © 2026 <span>CentAI</span> — AI-powered finance for everyone. Not a licensed financial advisor.
+  <br><br>
+  Questions or feedback? Email us at <a href="mailto:mroussis@icloud.com" style="color:#0faa74;">mroussis@icloud.com</a>
 </footer>
 
 
@@ -614,7 +616,7 @@ window.addEventListener('load', function() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
+          model: 'claude-sonnet-4-5',
           max_tokens: 1500,
           system: SYSTEM,
           tools: [{ type: 'web_search_20250305', name: 'web_search' }],
