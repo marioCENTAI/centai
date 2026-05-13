@@ -667,31 +667,43 @@ window.addEventListener('load', function() {
     document.getElementById('messages').scrollTop = 99999;
   }
 
-  const thinkingMessages = [
-    'Analysing your question...',
-    'Checking live market data...',
-    'Consulting financial knowledge...',
-    'Calculating the best answer...',
-    'Reviewing latest data...',
-    'Preparing your advice...'
-  ];
+  // Detect language from user text
+  function detectLang(text) {
+    const spanish = /[áéíóúüñ¿¡]/i.test(text) || /(cuánto|cómo|qué|cuál|dónde|por qué|inversión|ahorro|dinero|jubilación)/i.test(text);
+    const greek = /[Ͱ-Ͽἀ-῿]/.test(text);
+    const arabic = /[؀-ۿ]/.test(text);
+    const french = /[àâçèêëîïôùûü]/i.test(text) || /(comment|combien|pourquoi|investissement|épargne|argent)/i.test(text);
+    const portuguese = /[ãõ]/i.test(text) || /(quanto|como|investimento|poupança|dinheiro|aposentadoria)/i.test(text);
+    if (greek) return 'el';
+    if (arabic) return 'ar';
+    if (portuguese) return 'pt';
+    if (spanish) return 'es';
+    if (french) return 'fr';
+    return 'en';
+  }
+
+  const thinkingMsgs = {
+    en: { general: ['Analysing your question...', 'Thinking...', 'Almost ready...'], search: ['Searching live market data...', 'Reading latest prices...', 'Compiling your answer...'] },
+    es: { general: ['Analizando tu pregunta...', 'Pensando...', 'Casi listo...'], search: ['Buscando datos del mercado...', 'Leyendo los últimos precios...', 'Preparando tu respuesta...'] },
+    el: { general: ['Αναλύω την ερώτησή σου...', 'Σκέφτομαι...', 'Σχεδόν έτοιμο...'], search: ['Αναζητώ δεδομένα αγοράς...', 'Διαβάζω τελευταίες τιμές...', 'Ετοιμάζω την απάντησή σου...'] },
+    ar: { general: ['جاري تحليل سؤالك...', 'أفكر...', 'تقريباً جاهز...'], search: ['البحث عن بيانات السوق...', 'قراءة أحدث الأسعار...', 'إعداد إجابتك...'] },
+    fr: { general: ['Analyse de votre question...', 'Réflexion...', 'Presque prêt...'], search: ['Recherche de données de marché...', 'Lecture des derniers prix...', 'Préparation de votre réponse...'] },
+    pt: { general: ['Analisando sua pergunta...', 'Pensando...', 'Quase pronto...'], search: ['Buscando dados do mercado...', 'Lendo últimos preços...', 'Preparando sua resposta...'] }
+  };
 
   function showTyping(userText) {
     const needsSearch = needsWebSearch(userText || '');
-    const msg = needsSearch ? 'Searching live market data...' : thinkingMessages[Math.floor(Math.random() * thinkingMessages.length)];
+    const lang = detectLang(userText || '');
+    const msgSet = thinkingMsgs[lang] || thinkingMsgs.en;
+    const msgs = needsSearch ? msgSet.search : msgSet.general;
     const div = document.createElement('div'); div.className = 'msg'; div.id = 'typing';
     div.innerHTML = `<div class="av ai">¢</div><div class="bubble" style="display:flex;flex-direction:column;gap:8px;">
       <div class="typing"><span></span><span></span><span></span></div>
-      <div id="typing-msg" style="font-size:12px;color:var(--ink-faint);font-style:italic;">${msg}</div>
+      <div id="typing-msg" style="font-size:12px;color:var(--ink-faint);font-style:italic;">${msgs[0]}</div>
     </div>`;
     document.getElementById('messages').appendChild(div);
     document.getElementById('messages').scrollTop = 99999;
-
-    // Cycle through messages every 2 seconds
     let i = 0;
-    const msgs = needsSearch
-      ? ['Searching live market data...', 'Reading latest prices...', 'Compiling your answer...']
-      : ['Thinking...', 'Analysing...', 'Almost ready...'];
     const interval = setInterval(() => {
       i++;
       const el = document.getElementById('typing-msg');
