@@ -661,11 +661,38 @@ window.addEventListener('load', function() {
     document.getElementById('messages').scrollTop = 99999;
   }
 
-  function showTyping() {
+  const thinkingMessages = [
+    'Analysing your question...',
+    'Checking live market data...',
+    'Consulting financial knowledge...',
+    'Calculating the best answer...',
+    'Reviewing latest data...',
+    'Preparing your advice...'
+  ];
+
+  function showTyping(userText) {
+    const needsSearch = needsWebSearch(userText || '');
+    const msg = needsSearch ? 'Searching live market data...' : thinkingMessages[Math.floor(Math.random() * thinkingMessages.length)];
     const div = document.createElement('div'); div.className = 'msg'; div.id = 'typing';
-    div.innerHTML = `<div class="av ai">¢</div><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+    div.innerHTML = `<div class="av ai">¢</div><div class="bubble" style="display:flex;flex-direction:column;gap:8px;">
+      <div class="typing"><span></span><span></span><span></span></div>
+      <div id="typing-msg" style="font-size:12px;color:var(--ink-faint);font-style:italic;">${msg}</div>
+    </div>`;
     document.getElementById('messages').appendChild(div);
     document.getElementById('messages').scrollTop = 99999;
+
+    // Cycle through messages every 2 seconds
+    let i = 0;
+    const msgs = needsSearch
+      ? ['Searching live market data...', 'Reading latest prices...', 'Compiling your answer...']
+      : ['Thinking...', 'Analysing...', 'Almost ready...'];
+    const interval = setInterval(() => {
+      i++;
+      const el = document.getElementById('typing-msg');
+      if (el && i < msgs.length) el.textContent = msgs[i];
+      else clearInterval(interval);
+    }, 2000);
+    div.dataset.interval = interval;
   }
 
   // Smart auto-detection for web search
@@ -739,7 +766,7 @@ window.addEventListener('load', function() {
     document.getElementById('send-btn').disabled = true;
     addMsg('user', displayText || userText);
     chatHistory.push({ role: 'user', content: userText });
-    showTyping();
+    showTyping(userText);
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -766,12 +793,14 @@ window.addEventListener('load', function() {
         return;
       }
       const reply = data.content?.filter(b => b.type === 'text').map(b => b.text).join('') || 'Sorry, something went wrong.';
-      document.getElementById('typing')?.remove();
+      const typingEl = document.getElementById('typing');
+      if (typingEl) { clearInterval(typingEl.dataset.interval); typingEl.remove(); }
       chatHistory.push({ role: 'assistant', content: data.content || reply });
       addMsg('ai', reply);
       saveConversation();
     } catch {
-      document.getElementById('typing')?.remove();
+      const typingEl2 = document.getElementById('typing');
+      if (typingEl2) { clearInterval(typingEl2.dataset.interval); typingEl2.remove(); }
       addMsg('ai', 'Connection error. Please try again.');
     }
     document.getElementById('send-btn').disabled = false;
