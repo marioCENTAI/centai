@@ -372,6 +372,7 @@
         <div class="qchip" onclick="quickAsk('What KPIs should I track for my small business?')">🏢 Business KPIs</div>
         <div class="qchip" onclick="quickAsk('How much should I save for retirement?')">🏦 Retirement</div>
         <div class="qchip" onclick="quickAsk('Calculate compound interest on $5000 at 7% over 20 years')">🧮 Compound interest</div>
+        <div id="search-toggle" onclick="toggleWebSearch()" style="white-space:nowrap;font-size:12px;padding:5px 11px;border:1px solid var(--border-strong);border-radius:20px;cursor:pointer;background:var(--green);color:#fff;font-family:DM Sans,sans-serif;margin-left:auto;flex-shrink:0;" title="Toggle live web search">🌐 Live search: ON</div>
       </div>
       <div id="messages"></div>
       <div id="input-row">
@@ -667,6 +668,23 @@ window.addEventListener('load', function() {
     document.getElementById('messages').scrollTop = 99999;
   }
 
+  let webSearchEnabled = true;
+
+  function toggleWebSearch() {
+    webSearchEnabled = !webSearchEnabled;
+    const btn = document.getElementById('search-toggle');
+    if (webSearchEnabled) {
+      btn.textContent = '🌐 Live search: ON';
+      btn.style.background = 'var(--green)';
+      btn.style.color = '#fff';
+    } else {
+      btn.textContent = '🌐 Live search: OFF';
+      btn.style.background = 'transparent';
+      btn.style.color = 'var(--ink-muted)';
+    }
+  }
+  window.toggleWebSearch = toggleWebSearch;
+
   const SYSTEM = `You are CentAI, a friendly and expert personal finance advisor. You help with personal budgeting, investing, business financials, and data analysis. You have access to web search for real-time market data, stock prices, and financial news. Be concise, practical, and specific. Use numbers and examples. Format responses clearly. Avoid jargon unless asked. If the user pastes or uploads financial data, analyze it thoroughly and give actionable insights.`;
 
   // ── File upload handler ───────────────────────────────────────────
@@ -732,7 +750,7 @@ window.addEventListener('load', function() {
           model: 'claude-sonnet-4-5',
           max_tokens: 1500,
           system: SYSTEM,
-          tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+          tools: webSearchEnabled ? [{ type: 'web_search_20250305', name: 'web_search' }] : [],
           messages: chatHistory.map(m => ({
             role: m.role,
             content: Array.isArray(m.content)
