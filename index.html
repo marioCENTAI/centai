@@ -527,6 +527,20 @@
   </div>
 </section>
 
+<!-- UPGRADE MODAL -->
+<div id="upgrade-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:var(--white);border-radius:var(--radius-lg);padding:40px 36px;max-width:440px;width:90%;text-align:center;position:relative;">
+    <div style="font-size:48px;margin-bottom:16px;">🔒</div>
+    <h3 style="font-family:DM Serif Display,serif;font-size:24px;color:var(--ink);margin-bottom:12px;">You've used all 20 free questions</h3>
+    <p style="font-size:14px;color:var(--ink-muted);margin-bottom:28px;font-weight:300;line-height:1.7;">Upgrade to Pro for unlimited questions, file uploads, and conversation memory. Cancel anytime.</p>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <a href="https://buy.stripe.com/14A6oI6yxegrbHEg427EQ00" target="_blank" style="display:block;background:var(--green);color:#fff;padding:14px;border-radius:10px;font-size:16px;font-weight:500;text-decoration:none;">Upgrade to Pro — €19/month</a>
+      <a href="https://buy.stripe.com/cNifZi4qpgoz8vsg427EQ01" target="_blank" style="display:block;background:transparent;color:var(--green);padding:14px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;border:1.5px solid var(--green);">Upgrade to Business — €49/month</a>
+      <button onclick="closeUpgradeModal()" style="background:none;border:none;color:var(--ink-faint);font-size:13px;cursor:pointer;padding:8px;font-family:DM Sans,sans-serif;">Maybe later</button>
+    </div>
+  </div>
+</div>
+
 <!-- INSTALL BANNER -->
 <div id="install-banner">
   <div class="ib-icon">📱</div>
@@ -676,11 +690,51 @@ window.addEventListener('load', function() {
   }
 
   // ── App entry + memory load ──────────────────────────────────────
+  // ── Question limit tracking ──────────────────────────────────────
+  function getQuestionCount() {
+    const data = JSON.parse(localStorage.getItem('centai_usage') || '{}');
+    const month = new Date().toISOString().slice(0, 7);
+    return data[month] || 0;
+  }
+
+  function incrementQuestionCount() {
+    const data = JSON.parse(localStorage.getItem('centai_usage') || '{}');
+    const month = new Date().toISOString().slice(0, 7);
+    data[month] = (data[month] || 0) + 1;
+    localStorage.setItem('centai_usage', JSON.stringify(data));
+  }
+
+  function checkLimit() {
+    if (currentUser?.plan !== 'free') return true;
+    const count = getQuestionCount();
+    if (count >= 20) {
+      showUpgradeModal();
+      return false;
+    }
+    if (count === 15) {
+      addMsg('ai', '⚠️ You have used <strong>15 of your 20 free questions</strong> this month. <a href="https://buy.stripe.com/14A6oI6yxegrbHEg427EQ00" target="_blank" style="color:var(--green);font-weight:500;">Upgrade to Pro</a> for unlimited access.');
+    }
+    return true;
+  }
+
+  function showUpgradeModal() {
+    const modal = document.getElementById('upgrade-modal');
+    if (modal) modal.style.display = 'flex';
+  }
+
+  function closeUpgradeModal() {
+    const modal = document.getElementById('upgrade-modal');
+    if (modal) modal.style.display = 'none';
+  }
+  window.closeUpgradeModal = closeUpgradeModal;
+
   async function enterApp(user) {
     document.getElementById('paywall-screen').style.display = 'none';
     const chat = document.getElementById('chat-screen');
     chat.style.display = 'flex';
-    document.getElementById('user-display').textContent = `${user.name} · ${user.plan}`;
+    const count = getQuestionCount();
+    const countDisplay = user.plan === 'free' ? ` · ${20 - count} questions left` : '';
+    document.getElementById('user-display').textContent = `${user.name} · ${user.plan}${countDisplay}`;
     chatHistory = [];
 
     // Load previous conversation from Supabase
@@ -865,10 +919,12 @@ IMPORTANT: Always detect the language the user is writing in and respond in that
     const input = document.getElementById('msg-input');
     const userText = text || input.value.trim();
     if (!userText) return;
+    if (!checkLimit()) return;
     input.value = ''; input.style.height = 'auto';
     document.getElementById('send-btn').disabled = true;
     addMsg('user', displayText || userText);
     chatHistory.push({ role: 'user', content: userText });
+    incrementQuestionCount();
     showTyping(userText);
     try {
       const res = await fetch('/api/chat', {
