@@ -178,6 +178,15 @@
 </head>
 <body>
 
+<!-- COOKIE BANNER -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--ink);color:rgba(255,255,255,0.85);padding:16px 5vw;z-index:500;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+  <p style="font-size:13px;margin:0;font-weight:300;">We use cookies to improve your experience. By using CentAI you agree to our <a href="/privacy" style="color:var(--green-light);">Privacy Policy</a>.</p>
+  <div style="display:flex;gap:8px;">
+    <button onclick="acceptCookies()" style="background:var(--green);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:DM Sans,sans-serif;">Accept</button>
+    <button onclick="declineCookies()" style="background:transparent;color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.2);padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;font-family:DM Sans,sans-serif;">Decline</button>
+  </div>
+</div>
+
 <nav>
   <div class="nav-logo">Cent<span>AI</span></div>
   <div class="nav-links">
@@ -311,7 +320,7 @@
   <div class="pricing-grid">
     <div class="pricing-card">
       <div class="plan-name">Starter</div>
-      <div class="plan-price">$0</div>
+      <div class="plan-price">€0</div>
       <div class="plan-period">free forever</div>
       <ul class="plan-features">
         <li>20 questions per month</li>
@@ -324,7 +333,7 @@
     <div class="pricing-card featured">
       <div class="plan-badge">Most popular</div>
       <div class="plan-name">Pro</div>
-      <div class="plan-price">$19</div>
+      <div class="plan-price">€19</div>
       <div class="plan-period">per month</div>
       <ul class="plan-features">
         <li>Unlimited questions</li>
@@ -333,11 +342,11 @@
         <li>CSV & spreadsheet upload</li>
         <li>Save & revisit conversations</li>
       </ul>
-      <a class="plan-btn" href="https://buy.stripe.com/14A6oI6yxegrbHEg427EQ00" target="_blank">Start Pro — $19/mo</a>
+      <a class="plan-btn" href="https://buy.stripe.com/14A6oI6yxegrbHEg427EQ00" target="_blank">Start Pro — €19/mo</a>
     </div>
     <div class="pricing-card">
       <div class="plan-name">Business</div>
-      <div class="plan-price">$49</div>
+      <div class="plan-price">€49</div>
       <div class="plan-period">per month</div>
       <ul class="plan-features">
         <li>Everything in Pro</li>
@@ -440,6 +449,25 @@
   </div>
 </div>
 
+<!-- ABOUT -->
+<section style="padding:80px 5vw;background:var(--white);">
+  <div style="max-width:780px;margin:0 auto;display:flex;align-items:center;gap:48px;flex-wrap:wrap;">
+    <div style="flex:1;min-width:260px;">
+      <div class="section-label">About</div>
+      <h2 style="font-family:DM Serif Display,serif;font-size:clamp(24px,3vw,36px);color:var(--ink);line-height:1.2;margin-bottom:16px;">Built by a real person,<br>for real people.</h2>
+      <p style="font-size:15px;color:var(--ink-muted);line-height:1.75;font-weight:300;margin-bottom:16px;">Hi, I'm Mario — based in Nicosia, Cyprus. I built CentAI because quality financial advice has always been out of reach for most people. A one-hour session with a financial advisor costs €200-300, and most people never get the guidance they need.</p>
+      <p style="font-size:15px;color:var(--ink-muted);line-height:1.75;font-weight:300;">CentAI changes that — giving everyone access to expert-level financial guidance, 24/7, in their own language, at a fraction of the cost.</p>
+      <p style="font-size:14px;color:var(--ink-faint);margin-top:16px;">Questions? <a href="mailto:mroussis@icloud.com" style="color:var(--green);">mroussis@icloud.com</a></p>
+    </div>
+    <div style="flex-shrink:0;text-align:center;">
+      <div style="width:120px;height:120px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 12px;">👨‍💼</div>
+      <div style="font-size:15px;font-weight:500;color:var(--ink);">Mario Roussis</div>
+      <div style="font-size:13px;color:var(--ink-faint);">Founder, CentAI</div>
+      <div style="font-size:13px;color:var(--ink-faint);">Nicosia, Cyprus 🇨🇾</div>
+    </div>
+  </div>
+</section>
+
 <!-- TESTIMONIALS -->
 <section style="padding:100px 5vw;background:var(--cream);">
   <div style="text-align:center;margin-bottom:56px;">
@@ -535,9 +563,13 @@
 </div>
 
 <footer>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:24px;margin-bottom:20px;">
+    <a href="mailto:mroussis@icloud.com" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:13px;">✉️ Contact</a>
+    <a href="/privacy.html" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:13px;">🔒 Privacy Policy</a>
+    <a href="/terms.html" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:13px;">📄 Terms of Service</a>
+    <a href="https://linkedin.com" target="_blank" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:13px;">💼 LinkedIn</a>
+  </div>
   © 2026 <span>CentAI</span> — AI-powered finance for everyone. Not a licensed financial advisor.
-  <br><br>
-  Questions or feedback? Email us at <a href="mailto:mroussis@icloud.com" style="color:#0faa74;">mroussis@icloud.com</a>
 </footer>
 
 
@@ -895,6 +927,25 @@ IMPORTANT: Always detect the language the user is writing in and respond in that
   });
 
   // ── Expose functions globally for onclick handlers ────────────────
+  // Cookie consent
+  function acceptCookies() {
+    localStorage.setItem('cookieConsent', 'accepted');
+    document.getElementById('cookie-banner').style.display = 'none';
+  }
+  function declineCookies() {
+    localStorage.setItem('cookieConsent', 'declined');
+    document.getElementById('cookie-banner').style.display = 'none';
+  }
+  window.acceptCookies = acceptCookies;
+  window.declineCookies = declineCookies;
+
+  // Show cookie banner if not yet decided
+  if (!localStorage.getItem('cookieConsent')) {
+    setTimeout(() => {
+      document.getElementById('cookie-banner').style.display = 'flex';
+    }, 1500);
+  }
+
   window.handleAuth = handleAuth;
   // Direct event listener as backup
   document.addEventListener('DOMContentLoaded', function() {
