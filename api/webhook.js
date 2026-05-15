@@ -6,7 +6,6 @@ module.exports = async function(req, res) {
   try {
     const event = req.body;
 
-    // Handle successful payment events
     if (event.type === 'checkout.session.completed' || 
         event.type === 'customer.subscription.created' ||
         event.type === 'invoice.payment_succeeded') {
@@ -16,7 +15,6 @@ module.exports = async function(req, res) {
                            session.customer_details?.email ||
                            session.metadata?.email;
 
-      // Determine plan based on amount (in cents)
       const amount = session.amount_total || session.plan?.amount;
       let plan = 'pro';
       if (amount >= 4900) plan = 'business';
@@ -25,7 +23,6 @@ module.exports = async function(req, res) {
         const supabaseUrl = 'https://utcruwpakpwkwcpnyvwt.supabase.co';
         const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
 
-        // Get all users to find the one with matching email
         const response = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=1000`, {
           headers: {
             'apikey': supabaseKey,
@@ -37,7 +34,6 @@ module.exports = async function(req, res) {
         const user = data.users?.find(u => u.email === customerEmail);
 
         if (user) {
-          // Update user plan in Supabase
           await fetch(`${supabaseUrl}/auth/v1/admin/users/${user.id}`, {
             method: 'PUT',
             headers: {
