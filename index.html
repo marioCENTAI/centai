@@ -925,6 +925,11 @@ IMPORTANT: Always detect the language the user is writing in and respond in that
     addMsg('user', displayText || userText);
     chatHistory.push({ role: 'user', content: userText });
     incrementQuestionCount();
+    // Update counter display
+    if (currentUser?.plan === 'free') {
+      const remaining = 20 - getQuestionCount();
+      document.getElementById('user-display').textContent = `${currentUser.name} · free · ${remaining} questions left`;
+    }
     showTyping(userText);
     try {
       const res = await fetch('/api/chat', {
