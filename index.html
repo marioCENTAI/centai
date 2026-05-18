@@ -342,7 +342,7 @@
         <li>CSV & spreadsheet upload</li>
         <li>Save & revisit conversations</li>
       </ul>
-      <a class="plan-btn" href="https://buy.stripe.com/14A6oI6yxegrbHEg427EQ00" target="_blank">Start Pro — €14.99/mo</a>
+      <a class="plan-btn" href="https://buy.stripe.com/fZu9AU3ml2xJdPM6ts7EQ02" target="_blank">Start Pro — €14.99/mo</a>
     </div>
     <div class="pricing-card">
       <div class="plan-name">Elite</div>
@@ -355,7 +355,7 @@
         <li>White-label option</li>
         <li>Priority email support</li>
       </ul>
-      <a class="plan-btn" href="https://buy.stripe.com/cNifZi4qpgoz8vsg427EQ01" target="_blank">Start Elite</a>
+      <a class="plan-btn" href="https://buy.stripe.com/3cIdRabSRgozdPM9FE7EQ03" target="_blank">Start Elite</a>
     </div>
   </div>
 </section>
@@ -534,8 +534,8 @@
     <h3 style="font-family:DM Serif Display,serif;font-size:24px;color:var(--ink);margin-bottom:12px;">You've used all 20 free questions</h3>
     <p style="font-size:14px;color:var(--ink-muted);margin-bottom:28px;font-weight:300;line-height:1.7;">Upgrade to Pro for unlimited questions, file uploads, and conversation memory. Cancel anytime.</p>
     <div style="display:flex;flex-direction:column;gap:12px;">
-      <a href="https://buy.stripe.com/14A6oI6yxegrbHEg427EQ00" target="_blank" style="display:block;background:var(--green);color:#fff;padding:14px;border-radius:10px;font-size:16px;font-weight:500;text-decoration:none;">Upgrade to Pro — €14.99/month</a>
-      <a href="https://buy.stripe.com/cNifZi4qpgoz8vsg427EQ01" target="_blank" style="display:block;background:transparent;color:var(--green);padding:14px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;border:1.5px solid var(--green);">Upgrade to Elite — €39.99/month</a>
+      <a href="https://buy.stripe.com/fZu9AU3ml2xJdPM6ts7EQ02" target="_blank" style="display:block;background:var(--green);color:#fff;padding:14px;border-radius:10px;font-size:16px;font-weight:500;text-decoration:none;">Upgrade to Pro — €14.99/month</a>
+      <a href="https://buy.stripe.com/3cIdRabSRgozdPM9FE7EQ03" target="_blank" style="display:block;background:transparent;color:var(--green);padding:14px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;border:1.5px solid var(--green);">Upgrade to Elite — €39.99/month</a>
       <button onclick="closeUpgradeModal()" style="background:none;border:none;color:var(--ink-faint);font-size:13px;cursor:pointer;padding:8px;font-family:DM Sans,sans-serif;">Maybe later</button>
     </div>
   </div>
@@ -597,8 +597,8 @@ window.addEventListener('load', function() {
 
   // ── Stripe payment links ─────────────────────────────────────────
   // Replace these with your real Stripe payment links once created
-  const STRIPE_PRO_LINK     = 'https://buy.stripe.com/14A6oI6yxegrbHEg427EQ00';
-  const STRIPE_BUSINESS_LINK = 'https://buy.stripe.com/cNifZi4qpgoz8vsg427EQ01';
+  const STRIPE_PRO_LINK     = 'https://buy.stripe.com/fZu9AU3ml2xJdPM6ts7EQ02';
+  const STRIPE_BUSINESS_LINK = 'https://buy.stripe.com/3cIdRabSRgozdPM9FE7EQ03';
 
   let currentTab = 'signup';
   let selectedPlan = 'free';
@@ -712,7 +712,7 @@ window.addEventListener('load', function() {
       return false;
     }
     if (count === 15) {
-      addMsg('ai', '⚠️ You have used <strong>15 of your 20 free questions</strong> this month. <a href="https://buy.stripe.com/14A6oI6yxegrbHEg427EQ00" target="_blank" style="color:var(--green);font-weight:500;">Upgrade to Pro</a> for unlimited access.');
+      addMsg('ai', '⚠️ You have used <strong>15 of your 20 free questions</strong> this month. <a href="https://buy.stripe.com/fZu9AU3ml2xJdPM6ts7EQ02" target="_blank" style="color:var(--green);font-weight:500;">Upgrade to Pro</a> for unlimited access.');
     }
     return true;
   }
