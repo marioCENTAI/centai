@@ -507,6 +507,14 @@
       <div style="font-size:48px;margin-bottom:1rem;">💰</div>
       <h3 style="font-family:DM Serif Display,serif;font-size:24px;color:var(--ink);margin:0 0 12px;">Test Your Financial IQ</h3>
       <p style="font-size:15px;color:var(--ink-muted);margin:0 0 24px;font-weight:300;">See how much you really know about money, investing and budgeting.</p>
+      <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px;">
+        <button onclick="setQuizLang('en')" id="qlang-en" style="padding:6px 14px;border-radius:20px;border:1px solid var(--border-strong);font-size:13px;cursor:pointer;background:var(--green);color:#fff;font-family:DM Sans,sans-serif;">🇬🇧 EN</button>
+        <button onclick="setQuizLang('es')" id="qlang-es" style="padding:6px 14px;border-radius:20px;border:1px solid var(--border-strong);font-size:13px;cursor:pointer;background:transparent;color:var(--ink-muted);font-family:DM Sans,sans-serif;">🇪🇸 ES</button>
+        <button onclick="setQuizLang('el')" id="qlang-el" style="padding:6px 14px;border-radius:20px;border:1px solid var(--border-strong);font-size:13px;cursor:pointer;background:transparent;color:var(--ink-muted);font-family:DM Sans,sans-serif;">🇬🇷 ΕΛ</button>
+        <button onclick="setQuizLang('fr')" id="qlang-fr" style="padding:6px 14px;border-radius:20px;border:1px solid var(--border-strong);font-size:13px;cursor:pointer;background:transparent;color:var(--ink-muted);font-family:DM Sans,sans-serif;">🇫🇷 FR</button>
+        <button onclick="setQuizLang('ar')" id="qlang-ar" style="padding:6px 14px;border-radius:20px;border:1px solid var(--border-strong);font-size:13px;cursor:pointer;background:transparent;color:var(--ink-muted);font-family:DM Sans,sans-serif;">🇸🇦 AR</button>
+        <button onclick="setQuizLang('zh')" id="qlang-zh" style="padding:6px 14px;border-radius:20px;border:1px solid var(--border-strong);font-size:13px;cursor:pointer;background:transparent;color:var(--ink-muted);font-family:DM Sans,sans-serif;">🇨🇳 中文</button>
+      </div>
       <button onclick="startFinQuiz()" style="background:var(--green);color:#fff;border:none;padding:14px 36px;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;font-family:DM Sans,sans-serif;">Start Free Quiz →</button>
     </div>
 
@@ -1127,8 +1135,97 @@ IMPORTANT: Always detect the language the user is writing in and respond in that
   ];
   let fqCurrent=0, fqScore=0, fqAnswered=false, fqTopics={};
 
+  let fqCurrentLang = 'en';
+
+  const fqAllQuestions = {
+    en: [
+      {q:"What is compound interest?",opts:["Interest on original amount only","Interest earned on principal AND accumulated interest","A type of bank fee","A government tax"],correct:1,topic:"Investing",exp:"Compound interest is earned on both your original investment AND previous interest. This is why starting early is so powerful."},
+      {q:"What does ETF stand for?",opts:["Electronic Transfer Fund","Exchange Traded Fund","Equity Trading Formula","European Tax Fund"],correct:1,topic:"Investing",exp:"An ETF (Exchange Traded Fund) is a basket of investments that trades on a stock exchange, giving you instant diversification."},
+      {q:"What is the 50/30/20 budget rule?",opts:["50% savings, 30% food, 20% rent","50% needs, 30% wants, 20% savings","50% rent, 30% savings, 20% fun","50% investments, 30% needs, 20% wants"],correct:1,topic:"Budgeting",exp:"The 50/30/20 rule: 50% on needs, 30% on wants, and 20% on savings and investments."},
+      {q:"What is diversification?",opts:["Putting all money in one stock","Spreading investments to reduce risk","Investing only in foreign markets","Trading stocks daily"],correct:1,topic:"Investing",exp:"Diversification spreads your money across different investments so that if one fails, others compensate."},
+      {q:"What is inflation?",opts:["When stock prices rise","General increase in prices reducing purchasing power","A type of bank interest","When GDP grows"],correct:1,topic:"Economics",exp:"Inflation is the rate prices rise over time. At 3% inflation, €100 today costs €103 next year."},
+      {q:"What is a healthy debt-to-income ratio?",opts:["Above 50%","Below 36%","Exactly 50%","Above 75%"],correct:1,topic:"Debt",exp:"A debt-to-income ratio below 36% is healthy. Above 43% makes it harder to qualify for loans."},
+      {q:"What is dollar-cost averaging?",opts:["Exchanging currencies regularly","Investing a fixed amount regularly regardless of price","Averaging your annual salary","A currency trading strategy"],correct:1,topic:"Investing",exp:"Dollar-cost averaging means investing a fixed amount regularly regardless of market conditions."},
+      {q:"Which typically has the highest long-term return?",opts:["Savings account","Government bonds","Stock market index funds","Cash savings"],correct:2,topic:"Investing",exp:"Historically, stock market index funds return ~7-10% annually, far outperforming savings accounts and bonds."},
+      {q:"What is an emergency fund?",opts:["Money for holidays","3-6 months of expenses for unexpected events","A government benefit","A type of insurance"],correct:1,topic:"Budgeting",exp:"An emergency fund is 3-6 months of living expenses in an accessible account for unexpected events."},
+      {q:"What does P/E ratio measure?",opts:["Company profit divided by expenses","Stock price divided by earnings per share","Personal earnings vs expenses","Portfolio efficiency"],correct:1,topic:"Investing",exp:"The P/E ratio compares a stock's price to its earnings per share."}
+    ],
+    es: [
+      {q:"¿Qué es el interés compuesto?",opts:["Interés solo sobre el capital original","Interés sobre el capital Y los intereses acumulados","Una comisión bancaria","Un impuesto gubernamental"],correct:1,topic:"Inversión",exp:"El interés compuesto se gana sobre tu inversión original Y los intereses anteriores. Por eso empezar temprano es tan poderoso."},
+      {q:"¿Qué significa ETF?",opts:["Fondo de Transferencia Electrónica","Fondo Cotizado en Bolsa","Fórmula de Trading","Fondo Tributario Europeo"],correct:1,topic:"Inversión",exp:"Un ETF es una cesta de inversiones que cotiza en bolsa, dándote diversificación instantánea."},
+      {q:"¿Qué es la regla 50/30/20?",opts:["50% ahorro, 30% comida, 20% alquiler","50% necesidades, 30% deseos, 20% ahorro","50% alquiler, 30% ahorro, 20% ocio","50% inversiones, 30% necesidades, 20% deseos"],correct:1,topic:"Presupuesto",exp:"La regla 50/30/20: 50% en necesidades, 30% en deseos y 20% en ahorro e inversiones."},
+      {q:"¿Qué es la diversificación?",opts:["Poner todo en una acción","Distribuir inversiones para reducir riesgo","Invertir solo en mercados extranjeros","Comprar y vender diariamente"],correct:1,topic:"Inversión",exp:"La diversificación distribuye tu dinero entre diferentes inversiones para reducir el riesgo."},
+      {q:"¿Qué es la inflación?",opts:["Cuando suben las acciones","Aumento general de precios que reduce el poder adquisitivo","Un tipo de interés bancario","Cuando crece el PIB"],correct:1,topic:"Economía",exp:"La inflación es la tasa a la que suben los precios. Con 3%, algo de €100 costará €103 el año que viene."},
+      {q:"¿Cuál es un buen ratio deuda-ingresos?",opts:["Por encima del 50%","Por debajo del 36%","Exactamente el 50%","Por encima del 75%"],correct:1,topic:"Deudas",exp:"Un ratio deuda-ingresos por debajo del 36% se considera saludable."},
+      {q:"¿Qué es el promedio del coste?",opts:["Cambiar monedas regularmente","Invertir una cantidad fija regularmente sin importar el precio","Promediar tu salario anual","Una estrategia de divisas"],correct:1,topic:"Inversión",exp:"Significa invertir una cantidad fija regularmente independientemente del mercado."},
+      {q:"¿Qué tiene mayor rentabilidad a largo plazo?",opts:["Cuenta de ahorros","Bonos del gobierno","Fondos indexados bursátiles","Efectivo"],correct:2,topic:"Inversión",exp:"Los fondos indexados bursátiles retornan ~7-10% anual históricamente."},
+      {q:"¿Qué es un fondo de emergencia?",opts:["Dinero para vacaciones","3-6 meses de gastos para imprevistos","Un beneficio gubernamental","Un tipo de seguro"],correct:1,topic:"Presupuesto",exp:"Un fondo de emergencia son 3-6 meses de gastos en una cuenta accesible para imprevistos."},
+      {q:"¿Qué mide el ratio P/E?",opts:["Beneficio dividido por gastos","Precio acción dividido por beneficio por acción","Ingresos personales vs gastos","Eficiencia de cartera"],correct:1,topic:"Inversión",exp:"El ratio P/E compara el precio de una acción con sus beneficios por acción."}
+    ],
+    el: [
+      {q:"Τι είναι ο σύνθετος τόκος;",opts:["Τόκος μόνο στο αρχικό κεφάλαιο","Τόκος στο κεφάλαιο ΚΑΙ τους συσσωρευμένους τόκους","Τραπεζική χρέωση","Κυβερνητικός φόρος"],correct:1,topic:"Επενδύσεις",exp:"Ο σύνθετος τόκος κερδίζεται τόσο στην αρχική επένδυση όσο και στους προηγούμενους τόκους."},
+      {q:"Τι σημαίνει ETF;",opts:["Ηλεκτρονικό Ταμείο Μεταφοράς","Αμοιβαίο Κεφάλαιο Διαπραγμάτευσης","Μαθηματικός Τύπος","Ευρωπαϊκό Ταμείο"],correct:1,topic:"Επενδύσεις",exp:"Ένα ETF είναι καλάθι επενδύσεων που διαπραγματεύεται στο χρηματιστήριο."},
+      {q:"Τι είναι ο κανόνας 50/30/20;",opts:["50% αποταμίευση, 30% φαγητό, 20% ενοίκιο","50% ανάγκες, 30% επιθυμίες, 20% αποταμίευση","50% ενοίκιο, 30% αποταμίευση, 20% διασκέδαση","50% επενδύσεις, 30% ανάγκες, 20% επιθυμίες"],correct:1,topic:"Προϋπολογισμός",exp:"Ο κανόνας 50/30/20: 50% σε ανάγκες, 30% σε επιθυμίες και 20% σε αποταμίευση."},
+      {q:"Τι είναι η διαφοροποίηση;",opts:["Τοποθέτηση όλων σε μία μετοχή","Κατανομή επενδύσεων για μείωση κινδύνου","Επένδυση μόνο σε ξένες αγορές","Καθημερινή αγοραπωλησία"],correct:1,topic:"Επενδύσεις",exp:"Η διαφοροποίηση κατανέμει τα χρήματά σου για να μειώσει τον κίνδυνο."},
+      {q:"Τι είναι ο πληθωρισμός;",opts:["Άνοδος τιμών μετοχών","Γενική αύξηση τιμών που μειώνει αγοραστική δύναμη","Είδος τραπεζικού τόκου","Αύξηση ΑΕΠ"],correct:1,topic:"Οικονομία",exp:"Ο πληθωρισμός είναι ο ρυθμός αύξησης τιμών. Με 3%, κάτι €100 σήμερα θα κοστίζει €103 του χρόνου."},
+      {q:"Ποιο είναι υγιές ποσοστό χρέους/εισοδήματος;",opts:["Άνω 50%","Κάτω 36%","Ακριβώς 50%","Άνω 75%"],correct:1,topic:"Χρέος",exp:"Κάτω από 36% θεωρείται υγιές ποσοστό χρέους προς εισόδημα."},
+      {q:"Τι είναι ο μέσος όρος κόστους;",opts:["Τακτική ανταλλαγή νομισμάτων","Επένδυση σταθερού ποσού τακτικά ανεξάρτητα τιμής","Μέσος ετήσιος μισθός","Στρατηγική συναλλάγματος"],correct:1,topic:"Επενδύσεις",exp:"Σημαίνει επένδυση σταθερού ποσού τακτικά ανεξάρτητα από τις συνθήκες."},
+      {q:"Τι αποδίδει περισσότερο μακροπρόθεσμα;",opts:["Λογαριασμός ταμιευτηρίου","Κρατικά ομόλογα","Δείκτες χρηματιστηρίου","Μετρητά"],correct:2,topic:"Επενδύσεις",exp:"Οι δείκτες χρηματιστηρίου αποδίδουν ~7-10% ετησίως ιστορικά."},
+      {q:"Τι είναι το ταμείο έκτακτης ανάγκης;",opts:["Χρήματα για διακοπές","3-6 μήνες εξόδων για απρόοπτα","Κυβερνητική παροχή","Είδος ασφάλισης"],correct:1,topic:"Προϋπολογισμός",exp:"3-6 μήνες εξόδων σε προσβάσιμο λογαριασμό για απρόοπτα γεγονότα."},
+      {q:"Τι μετράει ο δείκτης P/E;",opts:["Κέρδος εταιρείας/έξοδα","Τιμή μετοχής/κέρδη ανά μετοχή","Προσωπικά έσοδα/έξοδα","Αποδοτικότητα χαρτοφυλακίου"],correct:1,topic:"Επενδύσεις",exp:"Ο P/E συγκρίνει την τιμή μετοχής με τα κέρδη ανά μετοχή."}
+    ],
+    fr: [
+      {q:"Qu'est-ce que l'intérêt composé?",opts:["Intérêt sur le capital initial seulement","Intérêt sur le capital ET les intérêts accumulés","Un type de frais bancaires","Un impôt gouvernemental"],correct:1,topic:"Investissement",exp:"L'intérêt composé est gagné sur votre investissement initial ET les intérêts précédents. C'est pourquoi commencer tôt est si puissant."},
+      {q:"Que signifie ETF?",opts:["Fonds de Transfert Électronique","Fonds Négocié en Bourse","Formule de Trading","Fonds Fiscal Européen"],correct:1,topic:"Investissement",exp:"Un ETF est un panier d'investissements qui se négocie en bourse, vous donnant une diversification instantanée."},
+      {q:"Qu'est-ce que la règle 50/30/20?",opts:["50% épargne, 30% nourriture, 20% loyer","50% besoins, 30% envies, 20% épargne","50% loyer, 30% épargne, 20% loisirs","50% investissements, 30% besoins, 20% envies"],correct:1,topic:"Budget",exp:"La règle 50/30/20: 50% pour les besoins, 30% pour les envies et 20% pour l'épargne et les investissements."},
+      {q:"Qu'est-ce que la diversification?",opts:["Mettre tout dans une seule action","Répartir les investissements pour réduire le risque","Investir uniquement à l'étranger","Acheter et vendre quotidiennement"],correct:1,topic:"Investissement",exp:"La diversification répartit votre argent entre différents investissements pour réduire le risque."},
+      {q:"Qu'est-ce que l'inflation?",opts:["Quand les actions montent","Augmentation générale des prix réduisant le pouvoir d'achat","Un type d'intérêt bancaire","Quand le PIB croît"],correct:1,topic:"Économie",exp:"L'inflation est le taux d'augmentation des prix. À 3%, quelque chose coûtant €100 coûtera €103 l'an prochain."},
+      {q:"Quel est un bon ratio dette/revenus?",opts:["Au-dessus de 50%","En dessous de 36%","Exactement 50%","Au-dessus de 75%"],correct:1,topic:"Dettes",exp:"Un ratio dette/revenus en dessous de 36% est considéré comme sain."},
+      {q:"Qu'est-ce que la moyenne des coûts?",opts:["Échanger des devises régulièrement","Investir un montant fixe régulièrement peu importe le prix","Calculer votre salaire annuel moyen","Une stratégie de change"],correct:1,topic:"Investissement",exp:"Cela signifie investir un montant fixe régulièrement indépendamment des conditions du marché."},
+      {q:"Qu'est-ce qui offre le meilleur rendement à long terme?",opts:["Compte d'épargne","Obligations d'État","Fonds indiciels boursiers","Espèces"],correct:2,topic:"Investissement",exp:"Historiquement, les fonds indiciels boursiers rapportent ~7-10% par an."},
+      {q:"Qu'est-ce qu'un fonds d'urgence?",opts:["Argent pour les vacances","3-6 mois de dépenses pour les imprévus","Une aide gouvernementale","Un type d'assurance"],correct:1,topic:"Budget",exp:"Un fonds d'urgence représente 3-6 mois de dépenses dans un compte accessible pour les imprévus."},
+      {q:"Que mesure le ratio P/E?",opts:["Bénéfice divisé par dépenses","Prix de l'action divisé par bénéfice par action","Revenus personnels vs dépenses","Efficacité du portefeuille"],correct:1,topic:"Investissement",exp:"Le ratio P/E compare le prix d'une action à ses bénéfices par action."}
+    ],
+    ar: [
+      {q:"ما هي الفائدة المركبة؟",opts:["فائدة على رأس المال الأصلي فقط","فائدة على رأس المال والفوائد المتراكمة","نوع من رسوم البنك","ضريبة حكومية"],correct:1,topic:"الاستثمار",exp:"الفائدة المركبة تُكسب على استثمارك الأصلي والفوائد السابقة. لهذا السبب البداية المبكرة قوية جداً."},
+      {q:"ماذا يعني ETF؟",opts:["صندوق تحويل إلكتروني","صندوق متداول في البورصة","صيغة تداول الأسهم","صندوق ضريبي أوروبي"],correct:1,topic:"الاستثمار",exp:"صندوق ETF هو سلة من الاستثمارات تُتداول في البورصة، مما يمنحك تنويعاً فورياً."},
+      {q:"ما هي قاعدة 50/30/20؟",opts:["50% ادخار، 30% طعام، 20% إيجار","50% احتياجات، 30% رغبات، 20% ادخار","50% إيجار، 30% ادخار، 20% ترفيه","50% استثمارات، 30% احتياجات، 20% رغبات"],correct:1,topic:"الميزانية",exp:"قاعدة 50/30/20: 50% للاحتياجات، 30% للرغبات، 20% للادخار والاستثمار."},
+      {q:"ما هو التنويع في الاستثمار؟",opts:["وضع كل المال في سهم واحد","توزيع الاستثمارات لتقليل المخاطر","الاستثمار في الأسواق الأجنبية فقط","شراء وبيع الأسهم يومياً"],correct:1,topic:"الاستثمار",exp:"التنويع يوزع أموالك على استثمارات مختلفة لتقليل المخاطر."},
+      {q:"ما هو التضخم؟",opts:["عندما ترتفع أسعار الأسهم","الزيادة العامة في الأسعار مما يقلل القوة الشرائية","نوع من الفوائد البنكية","عندما ينمو الناتج المحلي"],correct:1,topic:"الاقتصاد",exp:"التضخم هو معدل ارتفاع الأسعار. عند 3%، شيء بـ€100 سيصبح €103 العام القادم."},
+      {q:"ما هي نسبة الدين إلى الدخل الصحية؟",opts:["أكثر من 50%","أقل من 36%","بالضبط 50%","أكثر من 75%"],correct:1,topic:"الديون",exp:"نسبة دين إلى دخل أقل من 36% تعتبر صحية."},
+      {q:"ما هو متوسط تكلفة الدولار؟",opts:["تبادل العملات بانتظام","استثمار مبلغ ثابت بانتظام بغض النظر عن السعر","احتساب متوسط راتبك السنوي","استراتيجية صرف العملات"],correct:1,topic:"الاستثمار",exp:"يعني استثمار مبلغ ثابت بانتظام بغض النظر عن ظروف السوق."},
+      {q:"ما الذي يحقق أعلى عائد على المدى الطويل؟",opts:["حساب التوفير","السندات الحكومية","صناديق المؤشرات البورصية","النقد"],correct:2,topic:"الاستثمار",exp:"تاريخياً، صناديق المؤشرات تحقق ~7-10% سنوياً."},
+      {q:"ما هو صندوق الطوارئ؟",opts:["مال للعطلات","3-6 أشهر من النفقات للأحداث غير المتوقعة","منفعة حكومية","نوع من التأمين"],correct:1,topic:"الميزانية",exp:"صندوق الطوارئ هو 3-6 أشهر من نفقات المعيشة في حساب سهل الوصول."},
+      {q:"ماذا يقيس نسبة P/E؟",opts:["أرباح الشركة مقسومة على المصاريف","سعر السهم مقسوماً على ربحية السهم","الدخل الشخصي مقابل المصاريف","كفاءة المحفظة"],correct:1,topic:"الاستثمار",exp:"نسبة P/E تقارن سعر السهم بأرباحه لكل سهم."}
+    ],
+    zh: [
+      {q:"什么是复利？",opts:["仅在本金上计算利息","在本金和已积累利息上计算利息","一种银行费用","政府税收"],correct:1,topic:"投资",exp:"复利是在您的原始投资和之前的利息上都赚取利息。这就是为什么早开始投资如此重要。"},
+      {q:"ETF代表什么？",opts:["电子转账基金","交易所交易基金","股票交易公式","欧洲税务基金"],correct:1,topic:"投资",exp:"ETF（交易所交易基金）是在证券交易所交易的一篮子投资，让您立即实现多元化。"},
+      {q:"50/30/20预算规则是什么？",opts:["50%储蓄，30%食物，20%租金","50%需求，30%欲望，20%储蓄","50%租金，30%储蓄，20%娱乐","50%投资，30%需求，20%欲望"],correct:1,topic:"预算",exp:"50/30/20规则：50%用于需求，30%用于欲望，20%用于储蓄和投资。"},
+      {q:"什么是投资多元化？",opts:["将所有钱放在一只股票中","分散投资以降低风险","只在海外市场投资","每天买卖股票"],correct:1,topic:"投资",exp:"多元化将您的资金分散到不同的投资中，这样如果一个失败，其他的可以弥补。"},
+      {q:"什么是通货膨胀？",opts:["当股票价格上涨时","价格普遍上涨，降低购买力","一种银行利息","当GDP增长时"],correct:1,topic:"经济",exp:"通货膨胀是价格随时间上涨的速度。3%通胀率下，今天€100的东西明年将花费€103。"},
+      {q:"健康的债务收入比是多少？",opts:["超过50%","低于36%","恰好50%","超过75%"],correct:1,topic:"债务",exp:"债务收入比低于36%被认为是健康的。超过43%会使贷款资格更难获得。"},
+      {q:"什么是定期定额投资法？",opts:["定期兑换货币","无论价格如何定期投资固定金额","计算年平均工资","外汇交易策略"],correct:1,topic:"投资",exp:"定期定额意味着无论市场条件如何都定期投资固定金额，减少波动影响。"},
+      {q:"哪种投资通常长期回报最高？",opts:["储蓄账户","政府债券","股票市场指数基金","现金"],correct:2,topic:"投资",exp:"历史上，股票市场指数基金每年回报约7-10%，远超储蓄账户和债券。"},
+      {q:"什么是应急基金？",opts:["假期资金","3-6个月的意外事件费用","政府福利","一种保险"],correct:1,topic:"预算",exp:"应急基金是在可轻松获取的账户中存放3-6个月的生活费用，用于意外事件。"},
+      {q:"市盈率衡量什么？",opts:["公司利润除以费用","股票价格除以每股收益","个人收入与支出","投资组合效率"],correct:1,topic:"投资",exp:"市盈率（P/E）将股票价格与其每股收益进行比较。"}
+    ]
+  };
+
+  function setQuizLang(lang) {
+    fqCurrentLang = lang;
+    ['en','es','el','fr','ar','zh'].forEach(l => {
+      const btn = document.getElementById('qlang-'+l);
+      if(btn) { btn.style.background = l===lang ? 'var(--green)' : 'transparent'; btn.style.color = l===lang ? '#fff' : 'var(--ink-muted)'; }
+    });
+  }
+  window.setQuizLang = setQuizLang;
+
   function startFinQuiz(){
-    fqShuffle(fqQuestions);
+    const questions = JSON.parse(JSON.stringify(fqAllQuestions[fqCurrentLang] || fqAllQuestions.en));
+    fqShuffle(questions);
+    fqQuestions.length = 0;
+    questions.forEach(q => fqQuestions.push(q));
     document.getElementById('quiz-intro').style.display='none';
     document.getElementById('quiz-main').style.display='block';
     fqShowQ();
