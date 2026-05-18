@@ -333,7 +333,7 @@
     <div class="pricing-card featured">
       <div class="plan-badge">Most popular</div>
       <div class="plan-name">Pro</div>
-      <div class="plan-price">€19</div>
+      <div class="plan-price">€14.99</div>
       <div class="plan-period">per month</div>
       <ul class="plan-features">
         <li>Unlimited questions</li>
@@ -342,11 +342,11 @@
         <li>CSV & spreadsheet upload</li>
         <li>Save & revisit conversations</li>
       </ul>
-      <a class="plan-btn" href="https://buy.stripe.com/14A6oI6yxegrbHEg427EQ00" target="_blank">Start Pro — €19/mo</a>
+      <a class="plan-btn" href="https://buy.stripe.com/14A6oI6yxegrbHEg427EQ00" target="_blank">Start Pro — €14.99/mo</a>
     </div>
     <div class="pricing-card">
-      <div class="plan-name">Business</div>
-      <div class="plan-price">€49</div>
+      <div class="plan-name">Elite</div>
+      <div class="plan-price">€39.99</div>
       <div class="plan-period">per month</div>
       <ul class="plan-features">
         <li>Everything in Pro</li>
@@ -355,7 +355,7 @@
         <li>White-label option</li>
         <li>Priority email support</li>
       </ul>
-      <a class="plan-btn" href="https://buy.stripe.com/cNifZi4qpgoz8vsg427EQ01" target="_blank">Start Business</a>
+      <a class="plan-btn" href="https://buy.stripe.com/cNifZi4qpgoz8vsg427EQ01" target="_blank">Start Elite</a>
     </div>
   </div>
 </section>
@@ -383,7 +383,7 @@
       <div class="plan-pills">
         <button class="plan-pill active" onclick="setPlan(this,'free')">Free</button>
         <button class="plan-pill" onclick="setPlan(this,'pro')">Pro — $19/mo</button>
-        <button class="plan-pill" onclick="setPlan(this,'business')">Business — $49/mo</button>
+        <button class="plan-pill" onclick="setPlan(this,'elite')">Business — $49/mo</button>
       </div>
       <div class="auth-tabs">
         <button class="auth-tab active" onclick="switchTab(this,'signup')">Sign up</button>
@@ -514,7 +514,7 @@
     </details>
     <details style="background:var(--cream);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 24px;">
       <summary style="font-size:16px;font-weight:500;color:var(--ink);cursor:pointer;">What is the difference between the plans?</summary>
-      <p style="font-size:14px;color:var(--ink-muted);line-height:1.7;margin-top:12px;font-weight:300;">The Free plan gives you access to basic financial Q&A. Pro (€19/mo) gives you unlimited questions, file uploads, and conversation memory. Business (€49/mo) adds team seats, business KPI analysis, and priority support.</p>
+      <p style="font-size:14px;color:var(--ink-muted);line-height:1.7;margin-top:12px;font-weight:300;">The Free plan gives you 20 questions per month to explore CentAI at no cost — no credit card required. Pro (€14.99/mo) gives you unlimited questions, file uploads, and conversation memory. Elite (€39.99/mo) adds team seats, business KPI analysis, and priority support.</p>
     </details>
     <details style="background:var(--cream);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 24px;">
       <summary style="font-size:16px;font-weight:500;color:var(--ink);cursor:pointer;">Can I use CentAI on my phone?</summary>
@@ -534,8 +534,8 @@
     <h3 style="font-family:DM Serif Display,serif;font-size:24px;color:var(--ink);margin-bottom:12px;">You've used all 20 free questions</h3>
     <p style="font-size:14px;color:var(--ink-muted);margin-bottom:28px;font-weight:300;line-height:1.7;">Upgrade to Pro for unlimited questions, file uploads, and conversation memory. Cancel anytime.</p>
     <div style="display:flex;flex-direction:column;gap:12px;">
-      <a href="https://buy.stripe.com/14A6oI6yxegrbHEg427EQ00" target="_blank" style="display:block;background:var(--green);color:#fff;padding:14px;border-radius:10px;font-size:16px;font-weight:500;text-decoration:none;">Upgrade to Pro — €19/month</a>
-      <a href="https://buy.stripe.com/cNifZi4qpgoz8vsg427EQ01" target="_blank" style="display:block;background:transparent;color:var(--green);padding:14px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;border:1.5px solid var(--green);">Upgrade to Business — €49/month</a>
+      <a href="https://buy.stripe.com/14A6oI6yxegrbHEg427EQ00" target="_blank" style="display:block;background:var(--green);color:#fff;padding:14px;border-radius:10px;font-size:16px;font-weight:500;text-decoration:none;">Upgrade to Pro — €14.99/month</a>
+      <a href="https://buy.stripe.com/cNifZi4qpgoz8vsg427EQ01" target="_blank" style="display:block;background:transparent;color:var(--green);padding:14px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;border:1.5px solid var(--green);">Upgrade to Elite — €39.99/month</a>
       <button onclick="closeUpgradeModal()" style="background:none;border:none;color:var(--ink-faint);font-size:13px;cursor:pointer;padding:8px;font-family:DM Sans,sans-serif;">Maybe later</button>
     </div>
   </div>
@@ -614,9 +614,9 @@ window.addEventListener('load', function() {
     if (plan === 'free') {
       btn.textContent = 'Create free account →';
     } else if (plan === 'pro') {
-      btn.textContent = 'Sign up & go Pro ($19/mo) →';
+      btn.textContent = 'Sign up & go Pro ($14.99/mo) →';
     } else {
-      btn.textContent = 'Sign up & go Business ($49/mo) →';
+      btn.textContent = 'Sign up & go Elite ($39.99/mo) →';
     }
   }
 
