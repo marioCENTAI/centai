@@ -493,6 +493,54 @@
   </div>
 </section>
 
+
+<!-- FINANCIAL IQ QUIZ -->
+<section id="quiz-section" style="padding:100px 5vw;background:var(--white);">
+  <div style="text-align:center;margin-bottom:56px;">
+    <div class="section-label" style="text-align:center;">Free Quiz</div>
+    <div class="section-title" style="max-width:100%;text-align:center;margin-bottom:12px;">What is your Financial IQ?</div>
+    <p style="font-size:15px;color:var(--ink-muted);font-weight:300;">10 questions · 2 minutes · Find out your financial knowledge score</p>
+  </div>
+  <div style="max-width:600px;margin:0 auto;">
+
+    <div id="quiz-intro" style="text-align:center;padding:2rem 1rem;background:var(--cream);border-radius:var(--radius-lg);border:1px solid var(--border);">
+      <div style="font-size:48px;margin-bottom:1rem;">💰</div>
+      <h3 style="font-family:DM Serif Display,serif;font-size:24px;color:var(--ink);margin:0 0 12px;">Test Your Financial IQ</h3>
+      <p style="font-size:15px;color:var(--ink-muted);margin:0 0 24px;font-weight:300;">See how much you really know about money, investing and budgeting.</p>
+      <button onclick="startFinQuiz()" style="background:var(--green);color:#fff;border:none;padding:14px 36px;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;font-family:DM Sans,sans-serif;">Start Free Quiz →</button>
+    </div>
+
+    <div id="quiz-main" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <span style="font-size:13px;color:var(--ink-muted);">Question <span id="fq-num">1</span> of 10</span>
+        <span style="font-size:13px;font-weight:500;color:var(--green);">Score: <span id="fq-score">0</span></span>
+      </div>
+      <div style="background:var(--border);border-radius:4px;height:6px;margin-bottom:1.5rem;overflow:hidden;">
+        <div id="fq-bar" style="height:100%;background:var(--green);width:10%;transition:width 0.3s;"></div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;">
+        <p id="fq-question" style="font-size:16px;font-weight:500;color:var(--ink);margin:0 0 1.25rem;line-height:1.6;"></p>
+        <div id="fq-options" style="display:flex;flex-direction:column;gap:8px;"></div>
+        <div id="fq-feedback" style="display:none;margin-top:1rem;padding:12px 16px;border-radius:8px;font-size:14px;line-height:1.6;"></div>
+        <button id="fq-next" onclick="fqNext()" style="display:none;margin-top:1rem;background:var(--green);color:#fff;border:none;padding:11px 24px;border-radius:9px;font-size:14px;font-weight:500;cursor:pointer;width:100%;font-family:DM Sans,sans-serif;">Next question →</button>
+      </div>
+    </div>
+
+    <div id="quiz-result" style="display:none;text-align:center;padding:2rem 1rem;background:var(--cream);border-radius:var(--radius-lg);border:1px solid var(--border);">
+      <div id="fq-emoji" style="font-size:48px;margin-bottom:1rem;"></div>
+      <h3 style="font-family:DM Serif Display,serif;font-size:24px;color:var(--ink);margin:0 0 8px;">Your Financial IQ: <span id="fq-final" style="color:var(--green);"></span>/100</h3>
+      <p id="fq-label" style="font-size:15px;color:var(--ink-muted);margin:0 0 24px;font-weight:300;"></p>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:24px;text-align:left;">
+        <p style="font-size:12px;font-weight:500;color:var(--ink-faint);margin:0 0 8px;text-transform:uppercase;letter-spacing:0.05em;">Topic breakdown</p>
+        <div id="fq-breakdown" style="font-size:14px;color:var(--ink);line-height:1.8;"></div>
+      </div>
+      <a href="#app-section" style="display:block;background:var(--green);color:#fff;padding:14px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;margin-bottom:10px;">Improve your score with CentAI →</a>
+      <button onclick="fqRestart()" style="background:transparent;color:var(--ink-muted);border:1px solid var(--border-strong);padding:11px 24px;border-radius:10px;font-size:14px;cursor:pointer;width:100%;font-family:DM Sans,sans-serif;">Retake quiz</button>
+    </div>
+
+  </div>
+</section>
+
 <!-- FAQ -->
 <section id="faq" style="padding:100px 5vw; background:var(--white);">
   <div style="text-align:center;margin-bottom:56px;">
@@ -1062,6 +1110,112 @@ IMPORTANT: Always detect the language the user is writing in and respond in that
   if (/Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 768) {
     setTimeout(showInstallBanner, 3000);
   }
+
+
+  // ── Financial IQ Quiz ────────────────────────────────────────────
+  const fqQuestions = [
+    {q:"What is compound interest?",opts:["Interest on original amount only","Interest earned on principal AND accumulated interest","A type of bank fee","A government tax"],correct:1,topic:"Investing",exp:"Compound interest is earned on both your original investment AND previous interest. This is why starting early is so powerful."},
+    {q:"What does ETF stand for?",opts:["Electronic Transfer Fund","Exchange Traded Fund","Equity Trading Formula","European Tax Fund"],correct:1,topic:"Investing",exp:"An ETF (Exchange Traded Fund) is a basket of investments that trades on a stock exchange, giving you instant diversification."},
+    {q:"What is the 50/30/20 budget rule?",opts:["50% savings, 30% food, 20% rent","50% needs, 30% wants, 20% savings","50% rent, 30% savings, 20% fun","50% investments, 30% needs, 20% wants"],correct:1,topic:"Budgeting",exp:"The 50/30/20 rule: 50% on needs, 30% on wants, and 20% on savings and investments."},
+    {q:"What is diversification?",opts:["Putting all money in one stock","Spreading investments to reduce risk","Investing only in foreign markets","Trading stocks daily"],correct:1,topic:"Investing",exp:"Diversification spreads your money across different investments so that if one fails, others compensate. Never put all eggs in one basket."},
+    {q:"What is inflation?",opts:["When stock prices rise","General increase in prices reducing purchasing power","A type of bank interest","When GDP grows"],correct:1,topic:"Economics",exp:"Inflation is the rate prices rise over time. At 3% inflation, something costing €100 today costs €103 next year."},
+    {q:"What is a healthy debt-to-income ratio?",opts:["Above 50%","Below 36%","Exactly 50%","Above 75%"],correct:1,topic:"Debt",exp:"A debt-to-income ratio below 36% is considered healthy. Above 43% makes it harder to qualify for loans."},
+    {q:"What is dollar-cost averaging?",opts:["Exchanging currencies regularly","Investing a fixed amount regularly regardless of price","Averaging your annual salary","A currency trading strategy"],correct:1,topic:"Investing",exp:"Dollar-cost averaging means investing a fixed amount regularly (e.g. €200/month) regardless of market conditions, reducing volatility impact."},
+    {q:"Which typically has the highest long-term return?",opts:["Savings account","Government bonds","Stock market index funds","Cash savings"],correct:2,topic:"Investing",exp:"Historically, stock market index funds return ~7-10% annually over long periods, far outperforming savings accounts (1-3%) and bonds (3-5%)."},
+    {q:"What is an emergency fund?",opts:["Money for holidays","3-6 months of expenses for unexpected events","A government benefit","A type of insurance"],correct:1,topic:"Budgeting",exp:"An emergency fund is 3-6 months of living expenses in an accessible account for unexpected events like job loss or medical bills."},
+    {q:"What does P/E ratio measure?",opts:["Company profit divided by expenses","Stock price divided by earnings per share","Personal earnings vs expenses","Portfolio efficiency"],correct:1,topic:"Investing",exp:"The Price-to-Earnings (P/E) ratio compares a stock's price to its earnings. High P/E may mean overvalued or high growth expected."}
+  ];
+  let fqCurrent=0, fqScore=0, fqAnswered=false, fqTopics={};
+
+  function startFinQuiz(){
+    document.getElementById('quiz-intro').style.display='none';
+    document.getElementById('quiz-main').style.display='block';
+    fqShowQ();
+  }
+
+  function fqShowQ(){
+    const q=fqQuestions[fqCurrent];
+    document.getElementById('fq-num').textContent=fqCurrent+1;
+    document.getElementById('fq-bar').style.width=((fqCurrent+1)/10*100)+'%';
+    document.getElementById('fq-question').textContent=q.q;
+    document.getElementById('fq-feedback').style.display='none';
+    document.getElementById('fq-next').style.display='none';
+    fqAnswered=false;
+    const opts=document.getElementById('fq-options');
+    opts.innerHTML='';
+    q.opts.forEach((o,i)=>{
+      const btn=document.createElement('button');
+      btn.textContent=o;
+      btn.style.cssText='text-align:left;padding:10px 14px;border:1px solid var(--border-strong);border-radius:9px;background:var(--white);color:var(--ink);font-size:14px;cursor:pointer;width:100%;font-family:DM Sans,sans-serif;transition:background 0.15s;';
+      btn.onmouseover=()=>{if(!fqAnswered)btn.style.background='var(--green-pale)'};
+      btn.onmouseout=()=>{if(!fqAnswered)btn.style.background='var(--white)'};
+      btn.onclick=()=>fqAnswer(i,btn,q);
+      opts.appendChild(btn);
+    });
+  }
+
+  function fqAnswer(i,btn,q){
+    if(fqAnswered)return;
+    fqAnswered=true;
+    if(!fqTopics[q.topic])fqTopics[q.topic]={correct:0,total:0};
+    fqTopics[q.topic].total++;
+    const btns=document.getElementById('fq-options').querySelectorAll('button');
+    const fb=document.getElementById('fq-feedback');
+    if(i===q.correct){
+      fqScore++;
+      fqTopics[q.topic].correct++;
+      btn.style.background='var(--green-pale)';btn.style.borderColor='var(--green)';btn.style.color='var(--green)';
+      fb.style.cssText='display:block;background:var(--green-pale);border-left:3px solid var(--green);color:var(--green);padding:12px 16px;border-radius:0 8px 8px 0;font-size:14px;line-height:1.6;margin-top:1rem;';
+      fb.innerHTML='<strong>Correct!</strong> '+q.exp;
+    } else {
+      btn.style.background='#fdecea';btn.style.borderColor='#c0392b';btn.style.color='#c0392b';
+      btns[q.correct].style.background='var(--green-pale)';btns[q.correct].style.borderColor='var(--green)';btns[q.correct].style.color='var(--green)';
+      fb.style.cssText='display:block;background:#fdecea;border-left:3px solid #c0392b;color:#c0392b;padding:12px 16px;border-radius:0 8px 8px 0;font-size:14px;line-height:1.6;margin-top:1rem;';
+      fb.innerHTML='<strong>Not quite.</strong> '+q.exp;
+    }
+    document.getElementById('fq-score').textContent=fqScore;
+    document.getElementById('fq-next').style.display='block';
+    document.getElementById('fq-next').textContent=fqCurrent===9?'See my results →':'Next question →';
+  }
+
+  function fqNext(){
+    fqCurrent++;
+    if(fqCurrent>=10){fqShowResult();}
+    else{fqShowQ();}
+  }
+
+  function fqShowResult(){
+    document.getElementById('quiz-main').style.display='none';
+    const res=document.getElementById('quiz-result');
+    res.style.display='block';
+    const pct=fqScore*10;
+    document.getElementById('fq-final').textContent=pct;
+    let emoji,label;
+    if(pct>=80){emoji='🏆';label='Excellent! You have strong financial knowledge.';}
+    else if(pct>=60){emoji='📈';label='Good! You know the basics but there is room to grow.';}
+    else if(pct>=40){emoji='📚';label='Fair. Time to level up your financial knowledge!';}
+    else{emoji='💡';label='Beginner. CentAI can help you build a strong foundation!';}
+    document.getElementById('fq-emoji').textContent=emoji;
+    document.getElementById('fq-label').textContent=label;
+    let bd='';
+    Object.entries(fqTopics).forEach(([t,d])=>{
+      const p=d.total>0?Math.round(d.correct/d.total*100):0;
+      const c=p>=50?'var(--green)':'#c0392b';
+      bd+=`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>${t}</span><span style="color:${c};font-weight:500;">${p}%</span></div>`;
+    });
+    document.getElementById('fq-breakdown').innerHTML=bd;
+  }
+
+  function fqRestart(){
+    fqCurrent=0;fqScore=0;fqAnswered=false;fqTopics={};
+    document.getElementById('quiz-result').style.display='none';
+    document.getElementById('fq-score').textContent=0;
+    document.getElementById('quiz-main').style.display='block';
+    fqShowQ();
+  }
+  window.startFinQuiz=startFinQuiz;
+  window.fqNext=fqNext;
+  window.fqRestart=fqRestart;
 
 }); // end window.onload
 </script>
