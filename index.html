@@ -505,8 +505,8 @@
 
     <div id="quiz-intro" style="text-align:center;padding:2rem 1rem;background:var(--cream);border-radius:var(--radius-lg);border:1px solid var(--border);">
       <div style="font-size:48px;margin-bottom:1rem;">💰</div>
-      <h3 style="font-family:DM Serif Display,serif;font-size:24px;color:var(--ink);margin:0 0 12px;">Test Your Financial IQ</h3>
-      <p style="font-size:15px;color:var(--ink-muted);margin:0 0 24px;font-weight:300;">See how much you really know about money, investing and budgeting.</p>
+      <h3 id="quiz-title" style="font-family:DM Serif Display,serif;font-size:24px;color:var(--ink);margin:0 0 12px;">Test Your Financial IQ</h3>
+      <p id="quiz-subtitle" style="font-size:15px;color:var(--ink-muted);margin:0 0 24px;font-weight:300;">See how much you really know about money, investing and budgeting.</p>
       <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px;">
         <button onclick="setQuizLang('en')" id="qlang-en" style="padding:6px 14px;border-radius:20px;border:1px solid var(--border-strong);font-size:13px;cursor:pointer;background:var(--green);color:#fff;font-family:DM Sans,sans-serif;">🇬🇧 EN</button>
         <button onclick="setQuizLang('es')" id="qlang-es" style="padding:6px 14px;border-radius:20px;border:1px solid var(--border-strong);font-size:13px;cursor:pointer;background:transparent;color:var(--ink-muted);font-family:DM Sans,sans-serif;">🇪🇸 ES</button>
@@ -1212,12 +1212,31 @@ IMPORTANT: Always detect the language the user is writing in and respond in that
     ]
   };
 
+  const fqTitles = {
+    en: {title:'Test Your Financial IQ', sub:'See how much you really know about money, investing and budgeting.', btn:'Start Free Quiz →'},
+    es: {title:'Test de IQ Financiero', sub:'Descubre cuánto sabes sobre dinero, inversiones y presupuestos.', btn:'Empezar Quiz Gratis →'},
+    el: {title:'Τεστ Χρηματοοικονομικής Νοημοσύνης', sub:'Δες πόσα ξέρεις για χρήμα, επενδύσεις και προϋπολογισμό.', btn:'Ξεκίνα το Δωρεάν Τεστ →'},
+    fr: {title:'Test de QI Financier', sub:'Découvrez ce que vous savez vraiment sur l'argent et les investissements.', btn:'Commencer le Quiz →'},
+    ar: {title:'اختبار الذكاء المالي', sub:'اكتشف مدى معرفتك بالمال والاستثمار والميزانية.', btn:'ابدأ الاختبار المجاني →'},
+    zh: {title:'金融智商测试', sub:'测试您对金钱、投资和预算的了解程度。', btn:'开始免费测验 →'}
+  };
+
   function setQuizLang(lang) {
     fqCurrentLang = lang;
     ['en','es','el','fr','ar','zh'].forEach(l => {
       const btn = document.getElementById('qlang-'+l);
       if(btn) { btn.style.background = l===lang ? 'var(--green)' : 'transparent'; btn.style.color = l===lang ? '#fff' : 'var(--ink-muted)'; }
     });
+    const t = fqTitles[lang] || fqTitles.en;
+    const titleEl = document.getElementById('quiz-title');
+    const subEl = document.getElementById('quiz-subtitle');
+    const btnEl = document.querySelector('#quiz-intro button[onclick="startFinQuiz()"]');
+    if(titleEl) titleEl.textContent = t.title;
+    if(subEl) subEl.textContent = t.sub;
+    if(btnEl) btnEl.textContent = t.btn;
+    // RTL for Arabic
+    const introEl = document.getElementById('quiz-intro');
+    if(introEl) introEl.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
   }
   window.setQuizLang = setQuizLang;
 
