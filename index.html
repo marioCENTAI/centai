@@ -1240,6 +1240,12 @@ IMPORTANT: Always detect the language the user is writing in and respond in that
   }
   window.setQuizLang = setQuizLang;
 
+  // Auto-detect browser language for quiz
+  const browserLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase().slice(0,2);
+  const langMap = {es:'es', el:'el', fr:'fr', ar:'ar', zh:'zh'};
+  const detectedLang = langMap[browserLang] || 'en';
+  setQuizLang(detectedLang);
+
   function startFinQuiz(){
     const questions = JSON.parse(JSON.stringify(fqAllQuestions[fqCurrentLang] || fqAllQuestions.en));
     fqShuffle(questions);
