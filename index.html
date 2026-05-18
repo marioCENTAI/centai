@@ -515,7 +515,7 @@
         <button onclick="setQuizLang('ar')" id="qlang-ar" style="padding:6px 14px;border-radius:20px;border:1px solid var(--border-strong);font-size:13px;cursor:pointer;background:transparent;color:var(--ink-muted);font-family:DM Sans,sans-serif;">🇸🇦 AR</button>
         <button onclick="setQuizLang('zh')" id="qlang-zh" style="padding:6px 14px;border-radius:20px;border:1px solid var(--border-strong);font-size:13px;cursor:pointer;background:transparent;color:var(--ink-muted);font-family:DM Sans,sans-serif;">🇨🇳 中文</button>
       </div>
-      <button onclick="startFinQuiz()" style="background:var(--green);color:#fff;border:none;padding:14px 36px;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;font-family:DM Sans,sans-serif;">Start Free Quiz →</button>
+      <button id="quiz-start-btn" onclick="startFinQuiz()" style="background:var(--green);color:#fff;border:none;padding:14px 36px;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;font-family:DM Sans,sans-serif;">Start Free Quiz →</button>
     </div>
 
     <div id="quiz-main" style="display:none;">
@@ -1230,7 +1230,7 @@ IMPORTANT: Always detect the language the user is writing in and respond in that
     const t = fqTitles[lang] || fqTitles.en;
     const titleEl = document.getElementById('quiz-title');
     const subEl = document.getElementById('quiz-subtitle');
-    const btnEl = document.querySelector('#quiz-intro button[onclick="startFinQuiz()"]');
+    const btnEl = document.getElementById('quiz-start-btn');
     if(titleEl) titleEl.textContent = t.title;
     if(subEl) subEl.textContent = t.sub;
     if(btnEl) btnEl.textContent = t.btn;
