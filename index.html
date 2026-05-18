@@ -1128,6 +1128,7 @@ IMPORTANT: Always detect the language the user is writing in and respond in that
   let fqCurrent=0, fqScore=0, fqAnswered=false, fqTopics={};
 
   function startFinQuiz(){
+    fqShuffle(fqQuestions);
     document.getElementById('quiz-intro').style.display='none';
     document.getElementById('quiz-main').style.display='block';
     fqShowQ();
@@ -1206,8 +1207,17 @@ IMPORTANT: Always detect the language the user is writing in and respond in that
     document.getElementById('fq-breakdown').innerHTML=bd;
   }
 
+  function fqShuffle(arr){
+    for(let i=arr.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+    return arr;
+  }
+
   function fqRestart(){
     fqCurrent=0;fqScore=0;fqAnswered=false;fqTopics={};
+    fqShuffle(fqQuestions);
     document.getElementById('quiz-result').style.display='none';
     document.getElementById('fq-score').textContent=0;
     document.getElementById('quiz-main').style.display='block';
