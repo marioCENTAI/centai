@@ -379,11 +379,20 @@
     <div id="paywall-screen">
       <h2>Create your free account</h2>
       <p>Choose your plan, then sign up to start chatting.</p>
+      <div style="margin-bottom:20px;">
+        <button onclick="tryWithoutSignup()" style="background:var(--green-pale);color:var(--green);border:1px solid var(--border-strong);padding:10px 24px;border-radius:9px;font-size:14px;font-weight:500;cursor:pointer;font-family:DM Sans,sans-serif;width:100%;">👀 Try 2 questions first — no signup needed</button>
+        <p style="font-size:11px;color:var(--ink-faint);margin-top:6px;text-align:center;">No account required · See how good CentAI is</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+        <span style="font-size:12px;color:var(--ink-faint);">or sign up for full access</span>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
       <div class="plan-pill-label">Select plan:</div>
       <div class="plan-pills">
         <button class="plan-pill active" onclick="setPlan(this,'free')">Free</button>
-        <button class="plan-pill" onclick="setPlan(this,'pro')">Pro — $19/mo</button>
-        <button class="plan-pill" onclick="setPlan(this,'elite')">Business — $49/mo</button>
+        <button class="plan-pill" onclick="setPlan(this,'pro')">Pro — €14.99/mo</button>
+        <button class="plan-pill" onclick="setPlan(this,'elite')">Elite — €39.99/mo</button>
       </div>
       <div class="auth-tabs">
         <button class="auth-tab active" onclick="switchTab(this,'signup')">Sign up</button>
@@ -975,7 +984,14 @@ IMPORTANT: Always detect the language the user is writing in and respond in that
     const input = document.getElementById('msg-input');
     const userText = text || input.value.trim();
     if (!userText) return;
-    if (!checkLimit()) return;
+    if (currentUser?.plan === 'guest') {
+      if (!checkGuestLimit()) return;
+      guestQuestions++;
+      const remaining = MAX_GUEST - guestQuestions;
+      document.getElementById('user-display').innerHTML = `<span style="color:var(--green);">Guest</span> · ${remaining} free question${remaining!==1?'s':''} left`;
+    } else {
+      if (!checkLimit()) return;
+    }
     input.value = ''; input.style.height = 'auto';
     document.getElementById('send-btn').disabled = true;
     addMsg('user', displayText || userText);
@@ -1062,6 +1078,39 @@ IMPORTANT: Always detect the language the user is writing in and respond in that
       document.getElementById('cookie-banner').style.display = 'flex';
     }, 1500);
   }
+
+  // ── Try without signup ──────────────────────────────────────────
+  let guestQuestions = 0;
+  const MAX_GUEST = 2;
+
+  function tryWithoutSignup() {
+    document.getElementById('paywall-screen').style.display = 'none';
+    const chat = document.getElementById('chat-screen');
+    chat.style.display = 'flex';
+    document.getElementById('user-display').innerHTML = `<span style="color:var(--green);">Guest</span> · ${MAX_GUEST} free questions`;
+    currentUser = { email: 'guest', name: 'Guest', plan: 'guest' };
+    guestQuestions = 0;
+    addMsg('ai', `Hi! 👋 I'm CentAI, your AI finance advisor. You can ask me <strong>${MAX_GUEST} free questions</strong> without signing up. Ask me anything about budgets, investing or business finances!`);
+  }
+
+  function checkGuestLimit() {
+    if (currentUser?.plan !== 'guest') return true;
+    if (guestQuestions >= MAX_GUEST) {
+      showGuestUpgradeModal();
+      return false;
+    }
+    return true;
+  }
+
+  function showGuestUpgradeModal() {
+    // Show signup prompt instead of upgrade modal
+    document.getElementById('chat-screen').style.display = 'none';
+    document.getElementById('paywall-screen').style.display = 'block';
+    document.getElementById('paywall-screen').insertAdjacentHTML('afterbegin', 
+      '<div style="background:var(--green);color:#fff;padding:14px;border-radius:10px;margin-bottom:20px;font-size:14px;text-align:center;">🎉 You loved it! Create a free account for 20 questions/month</div>'
+    );
+  }
+  window.tryWithoutSignup = tryWithoutSignup;
 
   window.handleAuth = handleAuth;
   // Direct event listener as backup
